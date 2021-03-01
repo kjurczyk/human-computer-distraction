@@ -8,14 +8,15 @@ Its useful to read through this page if you've never developed on Chrome, but it
 - every other file is functionality to your chrome extension.
 - https://developer.chrome.com/docs/extensions/mv2/getstarted/
 
-To add the extension (for developer use):
+**To add the extension (for developer use):**
+- Clone repository to your desktop/laptop
 - go to chrome://extensions/ on your chrome browser
 - enable developer mode (top right corner on windows chrome)
 - click "Load unpacked"
 - select the "BaseChromeExtension" folder
 
-To test out extension:
-- Open a chrome window (window, not tab.  it shouldnt be same window as developer mode window)
+**To test out extension:**
+- Go to https://developer.chrome.com/ (permissions to use app are currently only on developer sites).
 - Go to top right corner, look at extensions, and pin our extension called "Nudged Pomodoros"
 - Click on the extension now on the top right corner, a green box should appear.
 - Click it, and the background will turn green.
