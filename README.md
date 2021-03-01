@@ -24,6 +24,6 @@ Its useful to read through this page if you've never developed on Chrome, but it
 
 - Right click on the extension now, and click "Options"
 - Pick a color that isn't green.
-- Go to a different tab and try to use the extension again.
+- Go back to https://developer.chrome.com/ and try to use the extension again.
 - The button should be the color you clicked.
 - The page should turn the color of the button you clicked.
