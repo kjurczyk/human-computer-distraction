@@ -9,20 +9,20 @@ Its useful to read through this page if you've never developed on Chrome, but it
 - https://developer.chrome.com/docs/extensions/mv2/getstarted/
 
 To add the extension (for developer use):
-go to chrome://extensions/ on your chrome browser
-enable developer mode (top right corner on windows chrome)
-click "Load unpacked"
-select the "BaseChromeExtension" folder
+- go to chrome://extensions/ on your chrome browser
+- enable developer mode (top right corner on windows chrome)
+- click "Load unpacked"
+- select the "BaseChromeExtension" folder
 
 To test out extension:
-Open a chrome window (window, not tab.  it shouldnt be same window as developer mode window)
-Go to top right corner, look at extensions, and pin our extension called "Nudged Pomodoros"
-Click on the extension now on the top right corner, a green box should appear.
-Click it, and the background will turn green.
-There is no undo button so you'll need to refresh the page to undo it right now.
+- Open a chrome window (window, not tab.  it shouldnt be same window as developer mode window)
+- Go to top right corner, look at extensions, and pin our extension called "Nudged Pomodoros"
+- Click on the extension now on the top right corner, a green box should appear.
+- Click it, and the background will turn green.
+- There is no undo button so you'll need to refresh the page to undo it right now.
 
-Right click on the extension now, and click "Options"
-Pick a color that isn't green.
-Go to a different tab and try to use the extension again.
-The button should be the color you clicked.
-The page should turn the color of the button you clicked.
+- Right click on the extension now, and click "Options"
+- Pick a color that isn't green.
+- Go to a different tab and try to use the extension again.
+- The button should be the color you clicked.
+- The page should turn the color of the button you clicked.
