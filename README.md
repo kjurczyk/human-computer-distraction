@@ -1,8 +1,7 @@
 # human-computer-distraction
 Interface leveraging Pomodoro and nudging techniques
 
-DO NOT ADD FILES TO BaseChromeExtension folder.
-
+**DO NOT ADD FILES TO BaseChromeExtension FOLDER**
 Its useful to read through this page if you've never developed on Chrome, but its simple:
 - manifest.json specifies all your files and gives you permissions.
 - every other file is functionality to your chrome extension.
