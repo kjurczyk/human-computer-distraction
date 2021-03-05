@@ -1,22 +1,87 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <style>
-      button {
-        height: 30px;
-        width: 30px;
-        outline: none;
-        margin: 10px;
-      }
-    </style>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <h1>Charts</h1>
+    <h1 class="text-center center box">Charts</h1>
     <div id="buttonDiv">
     </div>
     <div>
       <p>Choose a different background color!</p>
     </div>
+    
+    <!--Table where people can decide what settings they want to use (how much time each category gets)-->
+    <h2>Settings</h2>
+    <table>
+      <tr>
+        <th>Focus Time</th>
+        <td>
+          <input type="text" id="focusTime" value="25"> minutes
+        </td>
+      </tr>
+      <tr>
+        <th>Short Break</th>
+        <td>
+          <input type="text" id="shortBreakTime" value="5"> minutes
+        </td>
+      </tr>
+      <tr>
+        <th>Long Break</th>
+        <td>
+          <input type="text" id="longBreakTime" value="15"> minutes
+        </td>
+      </tr>
+    </table>
+
+    <!-- Pomodoro table and calendar side by side -->
+    <div class="row">
+      <!--Table with Daily Pomodoros-->
+      <div class="column">
+      <h2>Daily Pomodoros</h2>
+      <table class=center>
+        <tr>
+          <td><img src="images/1_slightlySmiling.png" alt="1_slightlySmiling"></td>
+          <td><img src="images/2_smiling.png" alt="2_smiling"></td>
+          <td><img src="images/3_happy.png" alt="3_happy"></td>
+          <td><img src="images/4_veryHappy.png" alt="4_veryHappy"></td>
+        </tr>
+        <tr>
+          <td><img src="images/5_current.png" alt="5_current"></td>
+          <td><img src="images/6_blank.png" alt="6_blank"></td>
+          <td><img src="images/6_blank.png" alt="6_blank"></td>
+          <td><img src="images/6_blank.png" alt="6_blank"></td>
+        </tr>
+        <tr>
+          <td><img src="images/6_blank.png" alt="6_blank"></td>
+          <td><img src="images/6_blank.png" alt="6_blank"></td>
+          <td><img src="images/6_blank.png" alt="6_blank"></td>
+          <td><img src="images/6_blank.png" alt="6_blank"></td>
+        </tr>
+        <tr>
+          <td><img src="images/6_blank.png" alt="6_blank"></td>
+          <td><img src="images/6_blank.png" alt="6_blank"></td>
+          <td><img src="images/6_blank.png" alt="6_blank"></td>
+          <td><img src="images/6_blank.png" alt="6_blank"></td>
+        </tr>
+      </table>
+    </div> <!--end of column containing Pomodoro calendar-->
+      <!--Calendar of days on which you've used the Pomodoro technique-->
+      <div class="column">
+      <h2>Calendar</h2>
+      <table>
+      <tr>
+        <td><img src="images/6_blank.png" alt="6_blank"></td>
+        <td><img src="images/6_blank.png" alt="6_blank"></td>
+        <td><img src="images/6_blank.png" alt="6_blank"></td>
+        <td><img src="images/6_blank.png" alt="6_blank"></td>
+      </tr>
+    </table>
+    </div> <!--end of column containing calendar-->
+  </div><!--end of table containing calendars-->
+      <h2>Time left until break:</h2>
+      
+    </table>
   </body>
   <script src="options.js"></script>
 </html>
