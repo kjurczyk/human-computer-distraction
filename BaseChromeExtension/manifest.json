@@ -2,7 +2,7 @@
     "name": "Nudged Pomodoros",
     "version": "1.0",
     "description": "Building a Chrome extension to help you take Pomodoros with Nudging interventions.",
-    "permissions": ["activeTab", "declarativeContent", "storage"],
+    "permissions": ["activeTab", "declarativeContent", "storage", "notifications", "alarms"],
     "options_page": "options.html",
     "background": {
       "scripts": ["background.js"],
