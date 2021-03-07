@@ -1,0 +1,102 @@
+/* font-family: 'Crimson Text', serif; */ /*sub-header*/
+/* font-family: 'Ultra', serif; */
+/* font-family: 'Wendy One', sans-serif; */
+
+:root {
+  --light-blue: #8fa6f6;
+  --medium-blue: #425edb;
+  --dark-blue: #0814a8;
+  --light-pink: #ffe0ea;
+  --medium-pink: #ff6f98;
+  --dark-pink: #c42c53;
+}
+
+body {
+  background-color: var(--dark-blue);
+}
+
+#title {
+  font-family: "Wendy One", sans-serif;
+  font-size: 3rem;
+  color: var(--light-pink);
+  text-align: center;
+}
+
+.subtitle {
+  font-family: "Crimson Text", serif;
+  color: var(--light-blue);
+  text-align: center;
+}
+
+body .container {
+  background-color: var(--medium-blue);
+}
+
+.header {
+  font-family: "Crimson Text", serif;
+  background-color: var(--medium-pink);
+  font-weight: bold;
+}
+
+.form-group label {
+  color: #a7b9f6;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+#focusTime,
+#lngBrk,
+#shBrk {
+  font-family: "Crimson Text", serif;
+}
+
+#update-settings {
+  font-family: "Crimson Text", serif;
+  font-size: 1.1rem;
+}
+
+.smiley {
+  font-size: 2.5rem;
+  /* color: ; */
+  --fa-primary-color: black;
+  --fa-secondary-opacity: 1;
+  --fa-secondary-color: #f8d75c;
+  /* background-color: white; */
+}
+
+.smiley-heart {
+  font-size: 2.5rem;
+  /* color: ; */
+  --fa-primary-color: red;
+  --fa-secondary-opacity: 1;
+  --fa-secondary-color: #f8d75c;
+  /* background-color: white; */
+}
+
+.smiley-title {
+  font-family: "Wendy One", sans-serif;
+  font-weight: bold;
+  color: var(--dark-pink);
+}
+
+.fa-calendar-day,
+.fa-sliders-h {
+  /* --fa-primary-color: ; */
+  --fa-primary-opacity: 1;
+  --fa-secondary-opacity: 1;
+  --fa-primary-color: var(--dark-pink);
+  --fa-secondary-color: var(--light-pink);
+}
+
+.streak {
+  font-family: "Wendy One", sans-serif;
+  color: var(--light-blue);
+}
+
+.streak .fa-certificate {
+  color: #f8d75c;
+}
+
+.streak .fa-layers-text {
+  color: var(--dark-blue);
+}
