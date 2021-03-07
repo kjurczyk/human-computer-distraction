@@ -17,12 +17,12 @@ chrome.runtime.onInstalled.addListener(function() {
 // We will need to update this var (25)
 // Uncomment when you want the alarm to start.
 // var alarm = chrome.alarms.create("Pomodoro Timer", {periodInMinutes: 25});
-
+/*
 chrome.alarms.onAlarm.addListener( function (alarm) {
   createNotification();
   audioNotification();
 });
-  
+*/
 function audioNotification(){
     var yourSound = new Audio('audio/mario_coin.mp3');
     yourSound.play();
