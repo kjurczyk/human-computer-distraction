@@ -13,3 +13,28 @@
 //   }
 // }
 // constructOptions(kButtonColors);
+// all the pomodoros and whether they are complete or not
+//var currentCyclePomodoros = ["firstPomo","secondPomo","thirdPomo","fourthPomo"];
+
+// function resetCurrentCycle()
+// {
+//   for(int i = 0; i < 4; i++)
+//   {
+//     currentCyclePomodoros[i] = false;
+//   }
+// };
+
+//changes the fourth Pomodoro either from a greyed out smiley or a super smiley smiley
+
+//updateSettings.addEventListener("click", fourthPomodoro);
+function fourthPomodoro()
+{
+  // if(currentCyclePomodoros[i] == false)
+  // {
+    //document.getElementById("fourthPomodoro").className = "fad fa-meh-blank smiley";
+    document.getElementById('fourthPomodoro').classList.toggle('fa-grin-hearts');
+    document.getElementById('fourthPomodoro').classList.toggle('fa-grin-beam');
+    console.log("hi");
+  // }
+  
+}
