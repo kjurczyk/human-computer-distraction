@@ -39,6 +39,9 @@ function fourthPomodoro()
   
 }
 
+// all the listeners
+document.getElementById("start-button").addEventListener("click", function() {pausePlayTimer()});
+
 
 var endTime = new Date();
 var timerPaused = true;  // the timer starts out as non-paused
@@ -82,6 +85,9 @@ function pausePlayTimer()
     document.getElementById("start-button").innerHTML = "Press to Play";
     console.log("inProgress && !timerPaused");
     changeBackgroundColor("start-button","#4CAF50");
+  }
+  else{
+    console.log("something happened");
   }
 }
 
