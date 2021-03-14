@@ -41,11 +41,12 @@ function fourthPomodoro()
 
 
 var endTime = new Date();
-var timerPaused = false;  // the timer starts out as non-paused
+var timerPaused = true;  // the timer starts out as non-paused
 var minutes;
 var seconds;
 var timePaused;
 var durationPaused;
+var focusTime;
 
 function startTimer()
 {
@@ -114,9 +115,13 @@ function updateTimer()
 function startTime() {
   endTime = new Date();
   //console.log("time: "+ endTime);
-  
-  endTime.setTime(endTime.getTime() + 1*60000);
+  focusTime = document.getElementById("focusTime").value;
+  console.log("starting focus time" + focusTime);
+  endTime.setTime(endTime.getTime() + focusTime*60000);
   //console.log("after clicking: "+ endTime);
+
+  // un-pause the timer
+  timerPaused = false;
 }
 
 function checkTime(i) {
