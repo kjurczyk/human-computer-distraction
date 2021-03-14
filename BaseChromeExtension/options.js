@@ -47,11 +47,45 @@ var seconds;
 var timePaused;
 var durationPaused;
 var focusTime;
+var inProgress = false;
 
 function startTimer()
 {
     startTime();
 }
+
+// decide whether to call the pause or play functino
+function pausePlayTimer()
+{
+  if(!inProgress) // if the timer has never been started
+  {
+    startTimer();
+    // change the button to say "pause"
+    document.getElementById("start-button").innerHTML = "Press to Pause";
+    // it's been started and is now in progress
+    inProgress = true;
+    console.log("!inProgress");
+    document.getElementById("start-button").style.backgroundColor = "#FFA500";
+  }
+  else if(inProgress && timerPaused) // if the timer is paused
+  {
+    playTimer();
+    // change the button to say "Pause"
+    document.getElementById("start-button").innerHTML = "Press to Pause";
+    console.log("inProgress && timerPaused");
+    changeBackgroundColor("start-button","#FFA500");
+  }
+  else if(inProgress && !timerPaused)  // if the timer is playing
+  {
+    pauseTimer();
+    // change the button to say "Play"
+    document.getElementById("start-button").innerHTML = "Press to Play";
+    console.log("inProgress && !timerPaused");
+    changeBackgroundColor("start-button","#4CAF50");
+  }
+}
+
+
 
 //pause the timer
 function pauseTimer()
@@ -59,6 +93,7 @@ function pauseTimer()
   timerPaused = true;
   timePaused = new Date();
   console.log("timer endTime paused at " + endTime);
+  // rename the button to be called play now that you have paused it
 }
 
 // unpause the timer
@@ -138,3 +173,7 @@ var x = setInterval(function() {
  
 }, 1000);
 
+function changeBackgroundColor(name, color)
+{
+  document.getElementById(name).style.backgroundColor = color;
+}
