@@ -33,7 +33,7 @@ function audioNotification(){
       chrome.notifications.create("BreakTimeNotification", opt, function(){});
     
       //include this line if you want to clear the notification after 5 seconds
-      setTimeout(function(){chrome.notifications.clear("BreakTimeNotification",function(){});},5000);
+      // setTimeout(function(){chrome.notifications.clear("BreakTimeNotification",function(){});},5000);
   }
 /*
 changeColor.onclick = function(element) {
