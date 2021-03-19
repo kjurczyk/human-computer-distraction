@@ -35,6 +35,7 @@ function audioNotification(){
       //include this line if you want to clear the notification after 5 seconds
       setTimeout(function(){chrome.notifications.clear("BreakTimeNotification",function(){});},5000);
   }
+/*
 changeColor.onclick = function(element) {
     let color = element.target.value;
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
@@ -43,7 +44,6 @@ changeColor.onclick = function(element) {
           {code: 'document.body.style.backgroundColor = "' + color + '";'});
     });
   };
-
   // POMODORO CHROME EXTENSION POPUPS
   $(function() {
   
@@ -228,7 +228,7 @@ changeColor.onclick = function(element) {
     }
   }
 });
-
+*/
 // function myFunction() {
 //   if(Notification.permission ==='granted'){
 //     //alert("we have permission");

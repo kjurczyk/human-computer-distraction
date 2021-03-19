@@ -15,24 +15,53 @@
 // constructOptions(kButtonColors);
 
 // when you open options page
+
 var focusTime = document.getElementById("focusTime");
-var shortBreak = document.getElementById("shBrk");
-var longBreak = document.getElementById("lngBrk");
+var shortBreak = document.getElementById("shortBreak");
+var longBreak = document.getElementById("longBreak");
 var updateId = document.getElementById("update-settings");
-if (localStorage.getItem("focusTime") == null)
-    localStorage.setItem("focusTime", focusTime.value);
-if (localStorage.getItem("shBrk") == null)
-    localStorage.setItem("shBrk", shortBreak.value);
-if (localStorage.getItem("lngBrk") == null)
-    localStorage.setItem("lngBrk", longBreak.value);
+
+var todaysCycles = 0;
+var totalCycles = 0;
+
+/*
+window.alert(localStorage.getItem("focusTime"));
+window.alert(localStorage.getItem("shortBreak"));
+window.alert(localStorage.getItem("longBreak"));
+*/
+
+if (localStorage.getItem("focusTime") == null) {
+    localStorage.setItem("focusTime", 25);
+}
+if (localStorage.getItem("shortBreak") == null) {
+    localStorage.setItem("shortBreak", 5);
+}
+if (localStorage.getItem("longBreak") == null) {
+    localStorage.setItem("longBreak", 30);
+}
+if (localStorage.getItem("todaysCycles") == null) {
+    localStorage.setItem("todaysCycles", 0);
+}
+else {
+    todaysCycles = localStorage.getItem("todaysCycles");
+}
+if (localStorage.getItem("totalCycles") == null) {
+    localStorage.setItem("totalCycles", 0);
+}
+else {
+    totalCycles = localStorage.getItem("totalCycles");
+}
+
 document.getElementById("focusTime").value = localStorage.getItem("focusTime");
-document.getElementById("shBrk").value = localStorage.getItem("shBrk");
-document.getElementById("lngBrk").value = localStorage.getItem("lngBrk");
+document.getElementById("shortBreak").value = localStorage.getItem("shortBreak");
+document.getElementById("longBreak").value = localStorage.getItem("longBreak");
+document.getElementById("todaysCycles").innerHTML = localStorage.getItem("todaysCycles");
+document.getElementById("totalCycles").innerHTML = localStorage.getItem("totalCycles");
 
 updateId.addEventListener('click', function () {
     localStorage.setItem("focusTime", focusTime.value);
-    localStorage.setItem("shBrk", shortBreak.value);
-    localStorage.setItem("lngBrk", longBreak.value);
+    localStorage.setItem("shortBreak", shortBreak.value);
+    localStorage.setItem("longBreak", longBreak.value);
     window.alert("Successfully updated timers!");
 })
 // all the pomodoros and whether they are complete or not
@@ -230,6 +259,17 @@ function updateCycleCounts()
     cyclesCompleted++;
     // reset the sectionsOfCycleCompleted back to 0
     sectionsOfCycleCompleted = 0;
+    if (localStorage.getItem("todaysCycles") == 0) {
+        var temp = localStorage.getItem("totalCycles");
+        temp++;
+        localStorage.setItem("totalCycles", temp+1);
+        document.getElementById("totalCycles").innerHTML = localStorage.getItem("totalCycles");
+    }
+    temp = localStorage.getItem("todaysCycles");
+    temp++;
+    localStorage.setItem("todaysCycles", temp);
+    document.getElementById("todaysCycles").innerHTML = localStorage.getItem("todaysCycles");
+
     // the next step will be a focus cycle
     currentPart = FOCUS;
   }
