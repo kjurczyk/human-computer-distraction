@@ -11,6 +11,7 @@ var alarm = chrome.alarms.create("Pomodoro Timer", {periodInMinutes: 1});
 alarmid.addEventListener('click', function () {
     createNotification();
     audioNotification();
+    localStorage.clear();
 });
 
 function audioNotification(){
