@@ -1,17 +1,20 @@
-chrome.runtime.onInstalled.addListener(function() {
-    chrome.storage.sync.set({color: '#3aa757'}, function() {
-      console.log('Nudged Pomodoros.');
-    });
-    chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
-      chrome.declarativeContent.onPageChanged.addRules([{
-        conditions: [new chrome.declarativeContent.PageStateMatcher({
-          pageUrl: {hostEquals: 'developer.chrome.com'},
-        })
-        ],
-            actions: [new chrome.declarativeContent.ShowPageAction()]
-      }]);
-    });
+chrome.runtime.onInstalled.addListener(function () {
+  chrome.storage.sync.set({ color: "#3aa757" }, function () {
+    console.log("Nudged Pomodoros.");
   });
+  chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
+    chrome.declarativeContent.onPageChanged.addRules([
+      {
+        conditions: [
+          new chrome.declarativeContent.PageStateMatcher({
+            pageUrl: { hostEquals: "developer.chrome.com" },
+          }),
+        ],
+        actions: [new chrome.declarativeContent.ShowPageAction()],
+      },
+    ]);
+  });
+});
 
 // Should we clear right away
 localStorage.clear();
@@ -22,25 +25,23 @@ var LONG = 2;
 var todaysCycles = 0;
 var totalCycles = 0;
 if (localStorage.getItem("focusTime") == null) {
-    localStorage.setItem("focusTime", 0.1);
+  localStorage.setItem("focusTime", 0.1);
 }
 if (localStorage.getItem("shortBreak") == null) {
-    localStorage.setItem("shortBreak", 5);
+  localStorage.setItem("shortBreak", 5);
 }
 if (localStorage.getItem("longBreak") == null) {
-    localStorage.setItem("longBreak", 30);
+  localStorage.setItem("longBreak", 30);
 }
 if (localStorage.getItem("todaysCycles") == null) {
-    localStorage.setItem("todaysCycles", 0);
-}
-else {
-    todaysCycles = localStorage.getItem("todaysCycles");
+  localStorage.setItem("todaysCycles", 0);
+} else {
+  todaysCycles = localStorage.getItem("todaysCycles");
 }
 if (localStorage.getItem("totalCycles") == null) {
-    localStorage.setItem("totalCycles", 0);
-}
-else {
-    totalCycles = localStorage.getItem("totalCycles");
+  localStorage.setItem("totalCycles", 0);
+} else {
+  totalCycles = localStorage.getItem("totalCycles");
 }
 if (localStorage.getItem("currentPart") == null) {
   localStorage.setItem("currentPart", FOCUS);
@@ -76,27 +77,26 @@ if (localStorage.getItem("distance") == null) {
 if (localStorage.getItem("proceed") == null) {
   localStorage.setItem("proceed", "false");
 }
-if (localStorage.getItem("completedAny") == null){
+if (localStorage.getItem("completedAny") == null) {
   localStorage.setItem("completedAny", "false");
 }
 
 var test = true;
 
 // Check and set date
-// Loop every 10 minutes? Every hour? 
+// Loop every 10 minutes? Every hour?
 
 function timerLoopFunction() {
   var timerPaused = localStorage.getItem("timerPaused");
   var inProgress = localStorage.getItem("inProgress");
 
-  if(timerPaused=="false" && inProgress=="true")
-  {
+  if (timerPaused == "false" && inProgress == "true") {
     console.log(localStorage.getItem("endTime"));
     updateTimer();
   }
 }
 
-var y = setInterval(function() {
+var y = setInterval(function () {
   timerLoopFunction();
 }, 1000);
 
@@ -120,13 +120,12 @@ var dateLoop = setInterval(function () {
   }
 }, 600000);
 
-
 var minutes;
 var seconds;
 // keep track of current info
-var currentPart = FOCUS;  // start with the assumption that the user will want to start with the focus
+var currentPart = FOCUS; // start with the assumption that the user will want to start with the focus
 var sectionsOfCycleCompleted = 0; // start at 0 sections completed
-var cyclesCompleted = 0;  // start with 0 cycles completed. In the future, this can pull from the chrome plugin
+var cyclesCompleted = 0; // start with 0 cycles completed. In the future, this can pull from the chrome plugin
 
 function setters() {
   console.log("in here");
@@ -147,8 +146,7 @@ var check = function(){
 check();
 */
 
-function updateTimer()
-{
+function updateTimer() {
   var now = new Date();
   var end = localStorage.getItem("endTime");
   end = Date.parse(end);
@@ -157,14 +155,14 @@ function updateTimer()
   console.log("distance: " + distance);
   localStorage.setItem("distance", distance);
   //console.log("distance", distance);
-  // If the count down is over, write some text 
+  // If the count down is over, write some text
   if (distance < 0) {
     // clearInterval(x);
     // increase the current part, as long as
     updateCycleCounts();
   }
   // if the count is not negative, show what time is left
-  else{
+  else {
     // Time calculations for minutes and seconds
     minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     console.log(minutes);
@@ -173,50 +171,45 @@ function updateTimer()
     minutes = checkTime(minutes);
     seconds = checkTime(seconds);
     console.log("Time Remaining: " + minutes + ":" + seconds);
- }
+  }
 }
 
-function updateCycleCounts()
-{
+function updateCycleCounts() {
   currentPart = localStorage.getItem("currentPart");
-  sectionsOfCycleCompleted = localStorage.getItem("sectionsOfCycleCompleted")
+  sectionsOfCycleCompleted = localStorage.getItem("sectionsOfCycleCompleted");
   console.log("We've completed PRE : " + sectionsOfCycleCompleted);
   console.log("We are in part PRE : " + currentPart);
   localStorage.setItem("completedAny", "true");
 
-  if(currentPart == "0")
-  {
+  if (currentPart == "0") {
     createNotification();
     audioNotification();
     // check if the next part should be long or short break
-    if(sectionsOfCycleCompleted >= 3) // if 3 sections have already been completed, user gets to be on long break now
-    {
+    if (sectionsOfCycleCompleted >= 3) {
+      // if 3 sections have already been completed, user gets to be on long break now
       currentPart = LONG;
-    }
-    else // we must still be due for a short break
-    {
+    } // we must still be due for a short break
+    else {
       console.log("we should end up here.");
       currentPart = SHORT;
     }
-  }
-  else if(currentPart == "1")  // the next part is definitely focus
-  {
+  } else if (currentPart == "1") {
+    // the next part is definitely focus
     breakOverNotification();
     audioNotification();
     currentPart = FOCUS;
     // they have completed another section of the cycle, so increase that by 1
     sectionsOfCycleCompleted++;
-  }
-  else  // the only other option is to currently be in a long 
-  {
+  } // the only other option is to currently be in a long
+  else {
     breakOverNotification();
     audioNotification();
     // reset the sectionsOfCycleCompleted back to 0
     sectionsOfCycleCompleted = 0;
     if (localStorage.getItem("todaysCycles") == 0) {
-        var temp = localStorage.getItem("totalCycles");
-        temp++;
-        localStorage.setItem("totalCycles", temp);
+      var temp = localStorage.getItem("totalCycles");
+      temp++;
+      localStorage.setItem("totalCycles", temp);
     }
     temp = localStorage.getItem("todaysCycles");
     temp++;
@@ -229,20 +222,14 @@ function updateCycleCounts()
   console.log("We are in part : " + currentPart);
   localStorage.setItem("currentPart", currentPart);
   localStorage.setItem("sectionsOfCycleCompleted", sectionsOfCycleCompleted);
-
 }
 
 function checkTime(i) {
-  if (i < 10) {i = "0" + i;}  // add zero in front of numbers < 10
+  if (i < 10) {
+    i = "0" + i;
+  } // add zero in front of numbers < 10
   return i;
 }
-
-
-
-
-
-
-
 
 /*
 let alarmid = document.getElementById('alarm');
@@ -267,10 +254,10 @@ chrome.alarms.onAlarm.addListener( function (alarm) {
   audioNotification();
 });
 */
-function audioNotification(){
-    var yourSound = new Audio('audio/mario_coin.mp3');
-    yourSound.play();
-    console.log("here3");
+function audioNotification() {
+  var yourSound = new Audio("audio/mario_coin.mp3");
+  yourSound.play();
+  console.log("here3");
 }
 
 function createDeceptiveNotification() {
@@ -279,20 +266,26 @@ function createDeceptiveNotification() {
     type: "basic",
     title: "Time to take a break!",
     iconUrl: "images/teapot.png",
-    buttons: [
-      {title: "Start Break"},
-      {title: "Snooze"}
-    ]
+    buttons: [{ title: "Start Break" }, { title: "Snooze" }],
   };
-  chrome.notifications.create("DeceptiveNotification", opt, function(){ console.log("test test test");});
+  chrome.notifications.create("DeceptiveNotification", opt, function () {
+    console.log("test test test");
+  });
 }
 
-function createNotification2(){
-  var opt = {type: "basic",title: "Your Title",message: "Your message",iconUrl: "your_icon.png"}
-  chrome.notifications.create("notificationName",opt,function(){});
+function createNotification2() {
+  var opt = {
+    type: "basic",
+    title: "Your Title",
+    message: "Your message",
+    iconUrl: "your_icon.png",
+  };
+  chrome.notifications.create("notificationName", opt, function () {});
 
   //include this line if you want to clear the notification after 5 seconds
-  setTimeout(function(){chrome.notifications.clear("notificationName",function(){});},5000);
+  setTimeout(function () {
+    chrome.notifications.clear("notificationName", function () {});
+  }, 5000);
 }
 
 function breakOverNotification() {
@@ -301,31 +294,35 @@ function breakOverNotification() {
   console.log(d);
   // if (state == nudge_1):
   opt = {
-      type: "basic",
-      title: "Break over!",
-      message: "Back to the grind, you slacker.",
-      iconUrl: "images/teapot.png"
-    }
-    chrome.notifications.create(`breakOver-${Date.now()}`, opt, function(){ console.log("Last error:", chrome.runtime.lastError);});
-    //include this line if you want to clear the notification after 5 seconds
+    type: "basic",
+    title: "Break over!",
+    message: "Back to the grind, you slacker.",
+    iconUrl: "images/teapot.png",
+  };
+  chrome.notifications.create(`breakOver-${Date.now()}`, opt, function () {
+    console.log("Last error:", chrome.runtime.lastError);
+  });
+  //include this line if you want to clear the notification after 5 seconds
 }
 
-function createNotification(){
+function createNotification() {
   var opt;
   var d = Date.now();
   console.log(d);
   // if (state == nudge_1):
   opt = {
-      type: "basic",
-      title: "Time to take a break!",
-      message: "Did you know if you snooze your breaks you will literally die?",
-      iconUrl: "images/teapot.png"
-    }
-    chrome.notifications.create(`focusOver-${Date.now()}`, opt, function(){ console.log("Last error:", chrome.runtime.lastError);});
-    //include this line if you want to clear the notification after 5 seconds
-    // setTimeout(function(){chrome.notifications.clear("BreakTimeNotification",function(){});},5000);
+    type: "basic",
+    title: "Time to take a break!",
+    message: "Did you know if you snooze your breaks you will literally die?",
+    iconUrl: "images/teapot.png",
+  };
+  chrome.notifications.create(`focusOver-${Date.now()}`, opt, function () {
+    console.log("Last error:", chrome.runtime.lastError);
+  });
+  //include this line if you want to clear the notification after 5 seconds
+  // setTimeout(function(){chrome.notifications.clear("BreakTimeNotification",function(){});},5000);
 }
 
-chrome.notifications.onClicked.addListener(function() {
-  chrome.tabs.create({url: "options.html"});
+chrome.notifications.onClicked.addListener(function () {
+  chrome.tabs.create({ url: "options.html" });
 });

@@ -45,8 +45,8 @@ body .container {
 }
 
 #focusTime,
-#lngBrk,
-#shBrk {
+#longBreak,
+#shortBreak {
   font-family: "Crimson Text", serif;
 }
 
@@ -55,7 +55,7 @@ body .container {
   font-size: 1.1rem;
 }
 
-.smiley {
+.smiley-active {
   font-size: 2.5rem;
   /* color: ; */
   --fa-primary-color: black;
@@ -64,13 +64,22 @@ body .container {
   /* background-color: white; */
 }
 
-.smiley-heart {
+.smiley-heart-active {
   font-size: 2.5rem;
   /* color: ; */
   --fa-primary-color: red;
   --fa-secondary-opacity: 1;
   --fa-secondary-color: #f8d75c;
   /* background-color: white; */
+}
+
+.default {
+  font-size: 2.5rem;
+  /* color: ; */
+  color: white;
+  --fa-primary-color: #c3bdbd;
+  --fa-secondary-opacity: 1;
+  --fa-secondary-color: #e4e4e4;
 }
 
 .smiley-title {
@@ -102,5 +111,5 @@ body .container {
 }
 
 .green-color {
-  color: rgb(0,255,0);
+  color: rgb(0, 255, 0);
 }
