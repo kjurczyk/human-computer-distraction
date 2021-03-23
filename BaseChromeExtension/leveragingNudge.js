@@ -54,7 +54,7 @@ updateButton.addEventListener('click', function () {
 })
 
 startButton.addEventListener('click', function () {
-    if (isNaN(parseInt(goal.value)) || goal.value <= 0) {
+    if (localStorage.getItem("goalPomodoros") <= 0) {
         window.alert("Please enter a goal before you continue! Make sure to click \"Update my settings\".");
         return;
     }
