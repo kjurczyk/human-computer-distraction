@@ -28,7 +28,7 @@ var SNOOZE = 3;
 var todaysCycles = 0;
 var totalCycles = 0;
 if (localStorage.getItem("focusTime") == null) {
-  localStorage.setItem("focusTime", 0.1);
+  localStorage.setItem("focusTime", 25);
 }
 if (localStorage.getItem("shortBreak") == null) {
   localStorage.setItem("shortBreak", 5);
