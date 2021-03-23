@@ -1,8 +1,8 @@
   {
-    "name": "Nudged Pomodoros",
+    "name": "Romadoro",
     "version": "1.0",
-    "description": "Building a Chrome extension to help you take Pomodoros with Nudging interventions.",
-    "permissions": ["activeTab", "declarativeContent", "storage", "notifications", "alarms"],
+    "description": "Building a Chrome extension to help you take Pomodoros.",
+    "permissions": ["notifications"],
     "options_page": "options.html",
     "background": {
       "scripts": ["background.js"],

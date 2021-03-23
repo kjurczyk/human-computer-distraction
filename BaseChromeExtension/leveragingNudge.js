@@ -54,18 +54,22 @@ updateButton.addEventListener('click', function () {
 })
 
 startButton.addEventListener('click', function () {
+    if (isNaN(parseInt(goal.value)) || goal.value <= 0) {
+        window.alert("Please enter a goal before you continue! Make sure to click \"Update my settings\".");
+        return;
+    }
+    localStorage.setItem("autoStartTimer", "start");
     window.close();
     chrome.tabs.create({url: "options.html"});
     parent.focus();
     window.focus();
-    localStorage.setItem("autoStartTimer", "start");
 
 })
 
 snoozeButton.addEventListener('click', function () {
+    localStorage.setItem("autoStartTimer", "snooze");
     window.close();
     chrome.tabs.create({url: "options.html"});
     parent.focus();
     window.focus();
-    localStorage.setItem("autoStartTimer", "snooze");
 })

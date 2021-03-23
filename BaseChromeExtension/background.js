@@ -1,5 +1,5 @@
 chrome.runtime.onInstalled.addListener(function () {
-  chrome.storage.sync.set({ color: "#3aa757" }, function () {
+  /*chrome.storage.sync.set({ color: "#3aa757" }, function () {
     console.log("Nudged Pomodoros.");
   });
   chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
@@ -13,11 +13,105 @@ chrome.runtime.onInstalled.addListener(function () {
         actions: [new chrome.declarativeContent.ShowPageAction()],
       },
     ]);
-  });
+  });*/
+  localStorage.clear();
+
+  if (localStorage.getItem("focusTime") == null) {
+    localStorage.setItem("focusTime", 25);
+  }
+  if (localStorage.getItem("shortBreak") == null) {
+    localStorage.setItem("shortBreak", 5);
+  }
+  if (localStorage.getItem("longBreak") == null) {
+    localStorage.setItem("longBreak", 30);
+  }
+  if (localStorage.getItem("todaysCycles") == null) {
+      localStorage.setItem("todaysCycles", 0);
+  }
+  else {
+    todaysCycles = localStorage.getItem("todaysCycles");
+  }
+  if (localStorage.getItem("isFinalCycle") == null) {
+    localStorage.setItem("isFinalCycle", false);
+  }
+  if (localStorage.getItem("snooze") == null) {
+    localStorage.setItem("snooze", 2);
+  }
+  if (localStorage.getItem("totalCycles") == null) {
+    localStorage.setItem("totalCycles", 0);
+  } else {
+    totalCycles = localStorage.getItem("totalCycles");
+  }
+  if (localStorage.getItem("currentPart") == null) {
+    localStorage.setItem("currentPart", FOCUS);
+  }
+  if (localStorage.getItem("isSnooze") == null) {
+    localStorage.setItem("isSnooze", false);
+  }
+  if (localStorage.getItem("sectionsOfCycleCompleted") == null) {
+    localStorage.setItem("sectionsOfCycleCompleted", 0);
+  }
+  if (localStorage.getItem("pomodoroDate") == null) {
+    var d = new Date();
+    localStorage.setItem("pomodoroDate", d.getDate());
+  }
+  if (localStorage.getItem("inProgress") == null) {
+    localStorage.setItem("inProgress", false);
+  }
+  if (localStorage.getItem("startTime") == null) {
+    localStorage.setItem("startTime", new Date());
+  }
+  if (localStorage.getItem("endTime") == null) {
+    localStorage.setItem("endTime", new Date());
+  }
+  if (localStorage.getItem("timerPaused") == null) {
+    localStorage.setItem("timerPaused", false);
+  }
+  if (localStorage.getItem("buttonState") == null) {
+    localStorage.setItem("buttonState", "PressToPause");
+  }
+  if (localStorage.getItem("timePaused") == null) {
+    localStorage.setItem("timePaused", 0);
+  }
+  if (localStorage.getItem("distance") == null) {
+    localStorage.setItem("distance", 0);
+  }
+  if (localStorage.getItem("proceed") == null) {
+    localStorage.setItem("proceed", "false");
+  }
+  if (localStorage.getItem("completedAny") == null) {
+    localStorage.setItem("completedAny", "false");
+  }
+  if (localStorage.getItem("nudgeState") == null){
+    // Set to random level
+    var px = randomPage(getRandomInt(4));
+    localStorage.setItem("nudgeState", px);
+  }
+  if (localStorage.getItem("nudgeLevel") == null){
+    localStorage.setItem("nudgeLevel", 3);
+  }
+  if (localStorage.getItem("lastLevel") == null){
+    localStorage.setItem("lastLevel", "reinforce/gif/tomato-01.gif");
+  }
+  if (localStorage.getItem("lastAction") == null){
+    localStorage.setItem("lastAction", "null");
+  }
+  if (localStorage.getItem("goalPomodoros") == null){
+    localStorage.setItem("goalPomodoros", "0");
+  }
+  if (localStorage.getItem("breaksTaken") == null){
+    localStorage.setItem("breaksTaken", 0);
+  }
+  if (localStorage.getItem("nudgesCompleted") == null){
+    var n = [];
+    localStorage.setItem("nudgesCompleted", JSON.stringify(n));
+  }
+  if (localStorage.getItem("autoStartTimer") == null){
+    localStorage.setItem("autoStartTimer", "null");
+  }
 });
 
 // Should we clear right away
-localStorage.clear();
 
 
 
@@ -27,99 +121,7 @@ var LONG = 2;
 var SNOOZE = 3;
 var todaysCycles = 0;
 var totalCycles = 0;
-if (localStorage.getItem("focusTime") == null) {
-  localStorage.setItem("focusTime", 25);
-}
-if (localStorage.getItem("shortBreak") == null) {
-  localStorage.setItem("shortBreak", 5);
-}
-if (localStorage.getItem("longBreak") == null) {
-  localStorage.setItem("longBreak", 30);
-}
-if (localStorage.getItem("todaysCycles") == null) {
-    localStorage.setItem("todaysCycles", 0);
-}
-else {
-  todaysCycles = localStorage.getItem("todaysCycles");
-}
-if (localStorage.getItem("isFinalCycle") == null) {
-  localStorage.setItem("isFinalCycle", false);
-}
-if (localStorage.getItem("snooze") == null) {
-  localStorage.setItem("snooze", 2);
-}
-if (localStorage.getItem("totalCycles") == null) {
-  localStorage.setItem("totalCycles", 0);
-} else {
-  totalCycles = localStorage.getItem("totalCycles");
-}
-if (localStorage.getItem("currentPart") == null) {
-  localStorage.setItem("currentPart", FOCUS);
-}
-if (localStorage.getItem("isSnooze") == null) {
-  localStorage.setItem("isSnooze", false);
-}
-if (localStorage.getItem("sectionsOfCycleCompleted") == null) {
-  localStorage.setItem("sectionsOfCycleCompleted", 0);
-}
-if (localStorage.getItem("pomodoroDate") == null) {
-  var d = new Date();
-  localStorage.setItem("pomodoroDate", d.getDate());
-}
-if (localStorage.getItem("inProgress") == null) {
-  localStorage.setItem("inProgress", false);
-}
-if (localStorage.getItem("startTime") == null) {
-  localStorage.setItem("startTime", new Date());
-}
-if (localStorage.getItem("endTime") == null) {
-  localStorage.setItem("endTime", new Date());
-}
-if (localStorage.getItem("timerPaused") == null) {
-  localStorage.setItem("timerPaused", false);
-}
-if (localStorage.getItem("buttonState") == null) {
-  localStorage.setItem("buttonState", "PressToPause");
-}
-if (localStorage.getItem("timePaused") == null) {
-  localStorage.setItem("timePaused", 0);
-}
-if (localStorage.getItem("distance") == null) {
-  localStorage.setItem("distance", 0);
-}
-if (localStorage.getItem("proceed") == null) {
-  localStorage.setItem("proceed", "false");
-}
-if (localStorage.getItem("completedAny") == null) {
-  localStorage.setItem("completedAny", "false");
-}
-if (localStorage.getItem("nudgeState") == null){
-  // Set to random level
-  var px = randomPage(getRandomInt(5));
-  localStorage.setItem("nudgeState", px);
-}
-if (localStorage.getItem("nudgeLevel") == null){
-  localStorage.setItem("nudgeLevel", 3);
-}
-if (localStorage.getItem("lastLevel") == null){
-  localStorage.setItem("lastLevel", "reinforce/gif/tomato-01.gif");
-}
-if (localStorage.getItem("lastAction") == null){
-  localStorage.setItem("lastAction", "null");
-}
-if (localStorage.getItem("goalPomodoros") == null){
-  localStorage.setItem("goalPomodoros", "0");
-}
-if (localStorage.getItem("breaksTaken") == null){
-  localStorage.setItem("breaksTaken", 0);
-}
-if (localStorage.getItem("nudgesCompleted") == null){
-  var n = [];
-  localStorage.setItem("nudgesCompleted", JSON.stringify(n));
-}
-if (localStorage.getItem("autoStartTimer") == null){
-  localStorage.setItem("autoStartTimer", "null");
-}
+
 
 // Check and set date
 // Loop every 10 minutes? Every hour?
@@ -162,12 +164,13 @@ var dateLoop = setInterval(function () {
 
     var repeat = true;
     var nudgesCompleted = JSON.parse(localStorage.getItem("nudgesCompleted"));
-    if (nudgesCompleted.length == 5) {
+    if (nudgesCompleted.length == 4) {
       localStorage.setItem("nudgeState", "default");
       repeat = false;
     }
     while (repeat) {
-      switch (getRandomInt(5)) {
+      switch (getRandomInt(4)) {
+        /*
         case 0:
           // default
           if (!nudgesCompleted.includes('default')) {
@@ -177,7 +180,8 @@ var dateLoop = setInterval(function () {
             localStorage.setItem("nudgeState", "default");
           }
           break;
-        case 1:
+          */
+        case 0:
           // confront
           if (!nudgesCompleted.includes('confront')) {
             repeat = false;
@@ -186,7 +190,7 @@ var dateLoop = setInterval(function () {
             localStorage.setItem("nudgeState", "confront");
           }
           break;
-        case 2:
+        case 1:
           // facilitate
           if (!nudgesCompleted.includes('facilitate')) {
             repeat = false;
@@ -195,7 +199,7 @@ var dateLoop = setInterval(function () {
             localStorage.setItem("nudgeState", "facilitate");
           }
           break;
-        case 3:
+        case 2:
           // leveraging
           if (!nudgesCompleted.includes('leveraging')) {
             repeat = false;
@@ -204,7 +208,7 @@ var dateLoop = setInterval(function () {
             localStorage.setItem("nudgeState", "leveraging");
           }
           break;
-        case 4:
+        case 3:
           // reinforce
           if (!nudgesCompleted.includes('reinforce')) {
             repeat = false;
@@ -399,15 +403,17 @@ function whichPage() {
 
 function randomPage(x) {
   switch(x) {
+    /*
     case 0:
       return "default";
-    case 1:
+      */
+    case 0:
       return "confront";
-    case 2: 
+    case 1: 
       return "facilitate";
-    case 3:
+    case 2:
       return "leveraging";
-    case 4:
+    case 3:
       return "reinforce";
   }
 }

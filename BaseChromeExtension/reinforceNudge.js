@@ -149,17 +149,17 @@ switch (localStorage.getItem("currentPart")) {
 }
 
 startButton.addEventListener('click', function () {
+    localStorage.setItem("autoStartTimer", "start");
     window.close();
     chrome.tabs.create({url: "options.html"});
     parent.focus();
     window.focus();
-    localStorage.setItem("autoStartTimer", "start");
 })
 
 snoozeButton.addEventListener('click', function () {
+    localStorage.setItem("autoStartTimer", "snooze");
     window.close();
     chrome.tabs.create({url: "options.html"});
     parent.focus();
     window.focus();
-    localStorage.setItem("autoStartTimer", "snooze");
 })

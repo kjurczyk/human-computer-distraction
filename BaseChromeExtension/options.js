@@ -182,6 +182,9 @@ if (localStorage.getItem("timerPaused")=="false" && localStorage.getItem("inProg
       document.getElementById("start-button").innerHTML = "Press to Pause";
       document.getElementById("start-button").style.backgroundColor = "#FFA500";
     }
+    if (localStorage.getItem("isSnooze") == "true") {
+      document.getElementById("start-button").style.display = "none";
+    }
   }
 } else {
   switch (localStorage.getItem("currentPart")) {
@@ -217,6 +220,22 @@ updateId.addEventListener('click', function () {
     shortBreak = document.getElementById("shortBreak");
     longBreak = document.getElementById("longBreak");
     snooze = document.getElementById("snooze");
+    if (isNaN(focusTime.value) || focusTime.value < 1) {
+      window.alert("Please make sure all times are at least 1 minute");
+      return;
+    }
+    if (isNaN(shortBreak.value) || shortBreak.value < 1) {
+      window.alert("Please make sure all times are at least 1 minute");
+      return;
+    }
+    if (isNaN(longBreak.value) || longBreak.value < 1) {
+      window.alert("Please make sure all times are at least 1 minute");
+      return;
+    }
+    if (isNaN(snooze.value) || snooze.value < 1 || snooze.value >= 30) {
+      window.alert("Please make sure all times are at least 1 minute.  Snooze also cannot be greater than 30 minutes.");
+      return;
+    }
     localStorage.setItem("focusTime", focusTime.value);
     localStorage.setItem("shortBreak", shortBreak.value);
     localStorage.setItem("longBreak", longBreak.value);
@@ -250,10 +269,8 @@ function fourthPomodoro() {
 
 // all the listeners
 document.getElementById("start-button").addEventListener("click", function() {
-  closeMeOut = true;
   pausePlayTimer()});
 document.getElementById("snooze-button").addEventListener("click", function() {
-  closeMeOut = true;
   snoozeTimer();
 });
 
@@ -263,6 +280,7 @@ function startTimer() {
 
 // decide whether to call the pause or play functino
 function pausePlayTimer() {
+  closeMeOut = true;
   if (localStorage.getItem("inProgress") == "false") {
     // if the timer has never been started
     startTimer();
@@ -297,7 +315,7 @@ function pausePlayTimer() {
 
 
 function snoozeTimer() {
-
+  closeMeOut = true;
   document.getElementById("start-button").style.display = "none";
   document.getElementById("snooze-button").style.display = "none";
   localStorage.setItem("isSnooze", true);
@@ -507,6 +525,7 @@ var x = setInterval(function () {
       localStorage.setItem("proceed", "true");
       updateTimer();
       localStorage.setItem("distance", 0);
+      window.close();
     } else if (distance > 0) {
       // Time calculations for minutes and seconds
       minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -519,11 +538,14 @@ var x = setInterval(function () {
           document.getElementById("start-button").innerHTML = "Press to Pause";
           document.getElementById("start-button").style.backgroundColor = "#FFA500";
         }
-
+        if (localStorage.getItem("isSnooze") == "true") {
+          document.getElementById("start-button").style.display = "none";
+        }
     }
   }
 }, 1000);
 
+/*
 var d = setInterval(function () {
   if (closeMeOutAgain) {
     closeMeOut = false;
@@ -534,7 +556,7 @@ var d = setInterval(function () {
     closeMeOutAgain = true;
   }
 }, 5000);
-
+*/
 function changeBackgroundColor(name, color)
 {
   document.getElementById(name).style.backgroundColor = color;
