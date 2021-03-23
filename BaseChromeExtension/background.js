@@ -19,9 +19,12 @@ chrome.runtime.onInstalled.addListener(function () {
 // Should we clear right away
 localStorage.clear();
 
+
+
 var FOCUS = 0;
 var SHORT = 1;
 var LONG = 2;
+var SNOOZE = 3;
 var todaysCycles = 0;
 var totalCycles = 0;
 if (localStorage.getItem("focusTime") == null) {
@@ -34,9 +37,16 @@ if (localStorage.getItem("longBreak") == null) {
   localStorage.setItem("longBreak", 30);
 }
 if (localStorage.getItem("todaysCycles") == null) {
-  localStorage.setItem("todaysCycles", 0);
-} else {
+    localStorage.setItem("todaysCycles", 0);
+}
+else {
   todaysCycles = localStorage.getItem("todaysCycles");
+}
+if (localStorage.getItem("isFinalCycle") == null) {
+  localStorage.setItem("isFinalCycle", false);
+}
+if (localStorage.getItem("snooze") == null) {
+  localStorage.setItem("snooze", 2);
 }
 if (localStorage.getItem("totalCycles") == null) {
   localStorage.setItem("totalCycles", 0);
@@ -45,6 +55,9 @@ if (localStorage.getItem("totalCycles") == null) {
 }
 if (localStorage.getItem("currentPart") == null) {
   localStorage.setItem("currentPart", FOCUS);
+}
+if (localStorage.getItem("isSnooze") == null) {
+  localStorage.setItem("isSnooze", false);
 }
 if (localStorage.getItem("sectionsOfCycleCompleted") == null) {
   localStorage.setItem("sectionsOfCycleCompleted", 0);
@@ -66,7 +79,7 @@ if (localStorage.getItem("timerPaused") == null) {
   localStorage.setItem("timerPaused", false);
 }
 if (localStorage.getItem("buttonState") == null) {
-  localStorage.setItem("buttonStage", "PressToPause");
+  localStorage.setItem("buttonState", "PressToPause");
 }
 if (localStorage.getItem("timePaused") == null) {
   localStorage.setItem("timePaused", 0);
@@ -80,8 +93,31 @@ if (localStorage.getItem("proceed") == null) {
 if (localStorage.getItem("completedAny") == null) {
   localStorage.setItem("completedAny", "false");
 }
-
-var test = true;
+if (localStorage.getItem("nudgeState") == null){
+  localStorage.setItem("nudgeState", "default");
+}
+if (localStorage.getItem("nudgeLevel") == null){
+  localStorage.setItem("nudgeLevel", 3);
+}
+if (localStorage.getItem("lastLevel") == null){
+  localStorage.setItem("lastLevel", "reinforce/gif/tomato-01.gif");
+}
+if (localStorage.getItem("lastAction") == null){
+  localStorage.setItem("lastAction", "null");
+}
+if (localStorage.getItem("goalPomodoros") == null){
+  localStorage.setItem("goalPomodoros", "0");
+}
+if (localStorage.getItem("breaksTaken") == null){
+  localStorage.setItem("breaksTaken", 0);
+}
+if (localStorage.getItem("nudgesCompleted") == null){
+  var n = [];
+  localStorage.setItem("nudgesCompleted", JSON.stringify(n));
+}
+if (localStorage.getItem("autoStartTimer") == null){
+  localStorage.setItem("autoStartTimer", "null");
+}
 
 // Check and set date
 // Loop every 10 minutes? Every hour?
@@ -91,7 +127,6 @@ function timerLoopFunction() {
   var inProgress = localStorage.getItem("inProgress");
 
   if (timerPaused == "false" && inProgress == "true") {
-    console.log(localStorage.getItem("endTime"));
     updateTimer();
   }
 }
@@ -117,8 +152,73 @@ var dateLoop = setInterval(function () {
     localStorage.setItem("inProgress", false);
     localStorage.setItem("startTime", new Date());
     localStorage.setItem("endTime", new Date());
+    localStorage.setItem("breaksTaken", 0);
+    localStorage.setItem("goalPomodoros", "0");
+    localStorage.setItem("lastAction", "null");
+    localStorage.setItem("lastLevel", "reinforce/gif/tomato-01.gif");
+    localStorage.setItem("nudgeLevel", 3);
+
+    var repeat = true;
+    var nudgesCompleted = JSON.parse(localStorage.getItem("nudgesCompleted"));
+    if (nudgesCompleted.length == 5) {
+      localStorage.setItem("nudgeState", "default");
+      repeat = false;
+    }
+    while (repeat) {
+      switch (getRandomInt(5)) {
+        case 0:
+          // default
+          if (!nudgesCompleted.includes('default')) {
+            repeat = false;
+            nudgesCompleted.push('default');
+            localStorage.setItem("nudgesCompleted", JSON.stringify(nudgesCompleted));
+            localStorage.setItem("nudgeState", "default");
+          }
+          break;
+        case 1:
+          // confront
+          if (!nudgesCompleted.includes('confront')) {
+            repeat = false;
+            nudgesCompleted.push('confront');
+            localStorage.setItem("nudgesCompleted", JSON.stringify(nudgesCompleted));
+            localStorage.setItem("nudgeState", "confront");
+          }
+          break;
+        case 2:
+          // facilitate
+          if (!nudgesCompleted.includes('facilitate')) {
+            repeat = false;
+            nudgesCompleted.push('facilitate');
+            localStorage.setItem("nudgesCompleted", JSON.stringify(nudgesCompleted));
+            localStorage.setItem("nudgeState", "facilitate");
+          }
+          break;
+        case 3:
+          // leveraging
+          if (!nudgesCompleted.includes('leveraging')) {
+            repeat = false;
+            nudgesCompleted.push('leveraging');
+            localStorage.setItem("nudgesCompleted", JSON.stringify(nudgesCompleted));
+            localStorage.setItem("nudgeState", "leveraging");
+          }
+          break;
+        case 4:
+          // reinforce
+          if (!nudgesCompleted.includes('reinforce')) {
+            repeat = false;
+            nudgesCompleted.push('reinforce');
+            localStorage.setItem("nudgesCompleted", JSON.stringify(nudgesCompleted));
+            localStorage.setItem("nudgeState", "reinforce");
+          }
+          break;
+      }
+    }
   }
 }, 600000);
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
+}
 
 var minutes;
 var seconds;
@@ -128,10 +228,8 @@ var sectionsOfCycleCompleted = 0; // start at 0 sections completed
 var cyclesCompleted = 0; // start with 0 cycles completed. In the future, this can pull from the chrome plugin
 
 function setters() {
-  console.log("in here");
   localStorage.setItem("inProgress", "false");
   localStorage.setItem("proceed", "true");
-  console.log("end");
   test = false;
 }
 /*
@@ -150,9 +248,7 @@ function updateTimer() {
   var now = new Date();
   var end = localStorage.getItem("endTime");
   end = Date.parse(end);
-  console.log("end " + end);
   var distance = end - now;
-  console.log("distance: " + distance);
   localStorage.setItem("distance", distance);
   //console.log("distance", distance);
   // If the count down is over, write some text
@@ -160,50 +256,67 @@ function updateTimer() {
     // clearInterval(x);
     // increase the current part, as long as
     updateCycleCounts();
+    localStorage.setItem("inProgress", "false");
+    localStorage.setItem("proceed", "true");
   }
   // if the count is not negative, show what time is left
   else {
     // Time calculations for minutes and seconds
     minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    console.log(minutes);
     seconds = Math.floor((distance % (1000 * 60)) / 1000);
-    console.log(seconds);
     minutes = checkTime(minutes);
     seconds = checkTime(seconds);
-    console.log("Time Remaining: " + minutes + ":" + seconds);
   }
 }
 
-function updateCycleCounts() {
+function updateCycleCounts()
+{
+  var isSnooze = localStorage.getItem("isSnooze");
+  if (isSnooze == "true") {
+    var html = notifyFocusOver();
+    chrome.tabs.create({url: html});
+    parent.focus();
+    window.focus();
+    return;
+  }
   currentPart = localStorage.getItem("currentPart");
   sectionsOfCycleCompleted = localStorage.getItem("sectionsOfCycleCompleted");
-  console.log("We've completed PRE : " + sectionsOfCycleCompleted);
-  console.log("We are in part PRE : " + currentPart);
   localStorage.setItem("completedAny", "true");
 
-  if (currentPart == "0") {
-    createNotification();
-    audioNotification();
+  if(currentPart == "0")
+  {
+    var html = notifyFocusOver();
+
+    chrome.tabs.create({url: html});
+    parent.focus();
+    window.focus();
     // check if the next part should be long or short break
     if (sectionsOfCycleCompleted >= 3) {
       // if 3 sections have already been completed, user gets to be on long break now
       currentPart = LONG;
     } // we must still be due for a short break
     else {
-      console.log("we should end up here.");
       currentPart = SHORT;
     }
-  } else if (currentPart == "1") {
-    // the next part is definitely focus
-    breakOverNotification();
-    audioNotification();
+  }
+  else if(currentPart == "1")  // the next part is definitely focus
+  {
+    html = notifyBreakOver();
+
+    chrome.tabs.create({url: html});
+    parent.focus();
+    window.focus();
     currentPart = FOCUS;
     // they have completed another section of the cycle, so increase that by 1
     sectionsOfCycleCompleted++;
-  } // the only other option is to currently be in a long
-  else {
-    breakOverNotification();
-    audioNotification();
+  }
+  else  // the only other option is to currently be in a long 
+  {
+    html = notifyBreakOver();
+
+    chrome.tabs.create({url: html});
+    parent.focus();
+    window.focus();
     // reset the sectionsOfCycleCompleted back to 0
     sectionsOfCycleCompleted = 0;
     if (localStorage.getItem("todaysCycles") == 0) {
@@ -218,8 +331,6 @@ function updateCycleCounts() {
     // the next step will be a focus cycle
     currentPart = FOCUS;
   }
-  console.log("We've completed : " + sectionsOfCycleCompleted);
-  console.log("We are in part : " + currentPart);
   localStorage.setItem("currentPart", currentPart);
   localStorage.setItem("sectionsOfCycleCompleted", sectionsOfCycleCompleted);
 }
@@ -254,10 +365,39 @@ chrome.alarms.onAlarm.addListener( function (alarm) {
   audioNotification();
 });
 */
-function audioNotification() {
-  var yourSound = new Audio("audio/mario_coin.mp3");
-  yourSound.play();
-  console.log("here3");
+
+function notifyFocusOver() {
+  audioNotification();
+  createNotification();
+  return whichPage();
+}
+
+function notifyBreakOver() {
+  audioNotification();
+  breakOverNotification();
+  return whichPage();
+}
+
+function whichPage() {
+  switch(localStorage.getItem("nudgeState")) {
+    case "default":
+      return "defaultNudge.html"
+    case "confront":
+      return "confrontNudge.html"
+    case "facilitate":
+      return "facilitateNudge.html"
+    case "leveraging":
+      return "leveragingNudge.html"
+    case "reinforce":
+      return "reinforceNudge.html"
+    default:
+      console.log("ERROR ERROR ERROR");
+  }
+}
+
+function audioNotification(){
+    var yourSound = new Audio('audio/mario_coin.mp3');
+    yourSound.play();
 }
 
 function createDeceptiveNotification() {
@@ -291,38 +431,33 @@ function createNotification2() {
 function breakOverNotification() {
   var opt;
   var d = Date.now();
-  console.log(d);
   // if (state == nudge_1):
   opt = {
-    type: "basic",
-    title: "Break over!",
-    message: "Back to the grind, you slacker.",
-    iconUrl: "images/teapot.png",
-  };
-  chrome.notifications.create(`breakOver-${Date.now()}`, opt, function () {
-    console.log("Last error:", chrome.runtime.lastError);
-  });
-  //include this line if you want to clear the notification after 5 seconds
+      type: "basic",
+      title: "Break over!",
+      message: "Your break is over.  Go to your Chrome tab to start your new focus session.",
+      iconUrl: "images/teapot.png"
+    }
+    chrome.notifications.create(`breakOver1-${Date.now()}`, opt, function(){ console.log("Last error:", chrome.runtime.lastError);});
+    //include this line if you want to clear the notification after 5 seconds
 }
 
 function createNotification() {
   var opt;
   var d = Date.now();
-  console.log(d);
   // if (state == nudge_1):
   opt = {
-    type: "basic",
-    title: "Time to take a break!",
-    message: "Did you know if you snooze your breaks you will literally die?",
-    iconUrl: "images/teapot.png",
-  };
-  chrome.notifications.create(`focusOver-${Date.now()}`, opt, function () {
-    console.log("Last error:", chrome.runtime.lastError);
-  });
-  //include this line if you want to clear the notification after 5 seconds
-  // setTimeout(function(){chrome.notifications.clear("BreakTimeNotification",function(){});},5000);
+      type: "basic",
+      title: "Time is up!",
+      message: "Go to your Chrome tab to start break or snooze.",
+      iconUrl: "images/teapot.png"
+    }
+    chrome.notifications.create(`focusOver1-${Date.now()}`, opt, function(){ console.log("Last error:", chrome.runtime.lastError);});
+    //include this line if you want to clear the notification after 5 seconds
+    // setTimeout(function(){chrome.notifications.clear("BreakTimeNotification",function(){});},5000);
 }
 
-chrome.notifications.onClicked.addListener(function () {
-  chrome.tabs.create({ url: "options.html" });
+chrome.notifications.onClicked.addListener(function() {
+  parent.focus();
+  window.focus();
 });

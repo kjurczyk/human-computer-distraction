@@ -9,9 +9,16 @@ var alarm = chrome.alarms.create("Pomodoro Timer", {periodInMinutes: 1});
 });*/
 
 alarmid.addEventListener('click', function () {
-    createNotification();
-    audioNotification();
-    localStorage.clear();
+    // createNotification();
+    // audioNotification();
+    // localStorage.clear();
+    localStorage.setItem("nudgeState", "leveraging");
+    localStorage.setItem("focusTime", "0.01");
+    localStorage.setItem("shortBreak", "0.01");
+    localStorage.setItem("longBreak", "0.01");
+    localStorage.setItem("snooze", "0.01");
+    // win1.close();
+
 });
 
 function audioNotification(){

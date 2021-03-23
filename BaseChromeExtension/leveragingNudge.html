@@ -17,15 +17,33 @@
 
   <body>
 		<div class="container pt-3 shadow-lg rounded">
- 
-        
+
           
           <h1 id="title" class="text-center">Pomodoro Dashboard</h1>
+          <div class="row justify-content-center">
+            <div class="col-md-auto">
+              <h4 id="goalText" style = "color: white;" class="subtitle">Set a goal for breaks to take today.  We recommend at least 4.</h4>
 
+              <div class="form-group row ml-4 mb-3 mx-auto">
+                  <label form="goallabel" style = "color: white;" class="col-md-5 col-form-label subtitle">Goal for Pomodoros Today:</label>
+                  <div class="col-md-7 p-0">
+                      <input type="number" class="form-control" value="" placeholder="Pomodoro goal... " id="goal">
+                  </div>
+              </div>
+            </div>
+          </div>
+
+          
+    <div class="row justify-content-center">
+        <div class="col-md-auto">
+        <div class="col-md-12 mb-4">
+            <button id="update-settings" class="btn btn-outline-light btn-block" type="button">Update my settings</button>
+        </div>
+    </div>
+</div>
           <!--needs to also be able to say "Your time is up! Time to start focusing." and "Your time is up! Time to take a long break."-->
           <h4 id="timeIsUp" class="subtitle">Your time is up! Time to take a short break.</h4>
-          
-   
+
             <button id="start-button" class="btn btn-outline-light btn-block" style="background-color: #4CAF50;" type="button">Start Break</button>
         
 
@@ -35,5 +53,5 @@
     
 
   </body>
-  <script src="defaultNudge.js"></script>
+  <script src="leveragingNudge.js"></script>
 
