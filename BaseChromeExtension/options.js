@@ -89,7 +89,76 @@ document.getElementById("snooze").value = localStorage.getItem("snooze");
 
 document.getElementById("todaysCycles").innerHTML = localStorage.getItem("todaysCycles");
 document.getElementById("totalCycles").innerHTML = localStorage.getItem("totalCycles");
+/*
+var asd = setInterval( function () {
+  document
+  .querySelectorAll(
+    `#cycle${parseInt(
+      localStorage.getItem("sectionsOfCycleCompleted")
+    )} svg`
+  )
+  .forEach((value) => value.classList.remove("default"));
+  document
+  .querySelectorAll(
+    `#cycle${parseInt(
+      localStorage.getItem("sectionsOfCycleCompleted")
+    )} svg`
+  )
+  .forEach((value) => value.classList.add("smiley-active"));
+  }, 1000);
+  */
 
+// We use setInterval instead of just having the for loop by itself
+// This is probably needed because of the querySelector grabbing the cycle initially
+// And we need it to grab it after that -- so we just use a setInterval to grab it again.
+var badgeLoop = setInterval( function () {
+  for (var i = 0; i <= parseInt(localStorage.getItem("sectionsOfCycleCompleted")); i++) {
+    
+    // This makes sure that the last emoji (id = 0) is always off when its not final cycle.
+    if ((i == 0 &&
+      localStorage.getItem("isFinalCycle") == "false")) {
+      // This is done so we don't continue on with this iteration.
+      continue;
+    }
+
+    // If we're in the final cycle (4th pomodoro), all emojis should be turned on
+    // So i == 0 is the 4th emoji.  The current part is focus meaning we JUST finished the LONG BREAK.
+    // We turn on all of the emojis at that point.
+    if ((i == 0 &&
+      localStorage.getItem("currentPart") == FOCUS)) {
+        for (let j = 0; j < 4; j++) {
+          document
+            .querySelectorAll(`#cycle${j} svg`)
+            .forEach((value) => value.classList.remove("default"));
+          document
+            .querySelectorAll(`#cycle${j} svg`)
+            .forEach((value) => value.classList.add("smiley-active"));
+        }
+        // This is done so we don't continue on with this iteration.
+        continue;
+      }
+
+    // This is the ELSE case, when i != 0 
+    // For anything other than 0, we look at what is the current cycle
+    // We turn on all of the previous cycles and the current cycle
+    // Excluding 0 (because 0 is the 4th emoji).
+    if (i != 0) {
+      document
+      .querySelectorAll(
+        `#cycle${i} svg`
+      )
+      .forEach((value) => value.classList.remove("default"));
+
+      document
+      .querySelectorAll(
+        `#cycle${i} svg`
+      )
+      .forEach((value) => value.classList.add("smiley-active"));
+
+    }
+  }
+}, 1000);
+  
 if (localStorage.getItem("autoStartTimer") == "snooze") {
   snoozeTimer();
   localStorage.setItem("autoStartTimer", "null");
@@ -464,7 +533,7 @@ var d = setInterval(function () {
   if (closeMeOut) {
     closeMeOutAgain = true;
   }
-}, 15000);
+}, 5000);
 
 function changeBackgroundColor(name, color)
 {
