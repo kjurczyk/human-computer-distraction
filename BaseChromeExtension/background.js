@@ -94,7 +94,9 @@ if (localStorage.getItem("completedAny") == null) {
   localStorage.setItem("completedAny", "false");
 }
 if (localStorage.getItem("nudgeState") == null){
-  localStorage.setItem("nudgeState", "default");
+  // Set to random level
+  var px = randomPage(getRandomInt(5));
+  localStorage.setItem("nudgeState", px);
 }
 if (localStorage.getItem("nudgeLevel") == null){
   localStorage.setItem("nudgeLevel", 3);
@@ -392,6 +394,21 @@ function whichPage() {
       return "reinforceNudge.html"
     default:
       console.log("ERROR ERROR ERROR");
+  }
+}
+
+function randomPage(x) {
+  switch(x) {
+    case 0:
+      return "default";
+    case 1:
+      return "confront";
+    case 2: 
+      return "facilitate";
+    case 3:
+      return "leveraging";
+    case 4:
+      return "reinforce";
   }
 }
 
