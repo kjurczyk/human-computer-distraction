@@ -12,7 +12,7 @@ alarmid.addEventListener('click', function () {
     // createNotification();
     // audioNotification();
     // localStorage.clear();
-    localStorage.setItem("nudgeState", "leveraging");
+    localStorage.setItem("nudgeState", "reinforce");
     localStorage.setItem("focusTime", "0.01");
     localStorage.setItem("shortBreak", "0.01");
     localStorage.setItem("longBreak", "0.01");

@@ -80,7 +80,6 @@ if (localStorage.getItem("isFinalCycle") == null) {
   localStorage.setItem("isFinalCycle", false);
 }
 
-
 document.getElementById("focusTime").value = localStorage.getItem("focusTime");
 document.getElementById("shortBreak").value = localStorage.getItem(
   "shortBreak"
@@ -110,7 +109,6 @@ if (localStorage.getItem("timerPaused")=="false" && localStorage.getItem("inProg
     seconds = checkTime(seconds);
     document.getElementById("txt").innerHTML =
       "Time Remaining: " + minutes + ":" + seconds;
-    console.log(endTime);
     if (localStorage.getItem("isSnooze") == "false") {
       document.getElementById("start-button").innerHTML = "Press to Pause";
       document.getElementById("start-button").style.backgroundColor = "#FFA500";
@@ -178,14 +176,12 @@ function fourthPomodoro() {
   //document.getElementById("fourthPomodoro").className = "fad fa-meh-blank smiley";
   document.getElementById("fourthPomodoro").classList.toggle("fa-grin-hearts");
   document.getElementById("fourthPomodoro").classList.toggle("fa-grin-beam");
-  console.log("hi");
   // }
 }
 
 // all the listeners
 document.getElementById("start-button").addEventListener("click", function() {
   closeMeOut = true;
-  console.log("happata");
   pausePlayTimer()});
 document.getElementById("snooze-button").addEventListener("click", function() {
   closeMeOut = true;
@@ -198,9 +194,6 @@ function startTimer() {
 
 // decide whether to call the pause or play functino
 function pausePlayTimer() {
-  console.log("InProgress : " + localStorage.getItem("inProgress"));
-  console.log("timerPaused : " + localStorage.getItem("timerPaused"));
-
   if (localStorage.getItem("inProgress") == "false") {
     // if the timer has never been started
     startTimer();
@@ -209,7 +202,6 @@ function pausePlayTimer() {
     // it's been started and is now in progress
     inProgress = true;
     localStorage.setItem("inProgress", true);
-    console.log("!inProgress");
     document.getElementById("start-button").style.backgroundColor = "#FFA500";
   } else if (
     localStorage.getItem("inProgress") == "true" &&
@@ -219,7 +211,6 @@ function pausePlayTimer() {
     playTimer();
     // change the button to say "Pause"
     document.getElementById("start-button").innerHTML = "Press to Pause";
-    console.log("inProgress && timerPaused");
     changeBackgroundColor("start-button", "#FFA500");
   } else if (
     localStorage.getItem("inProgress") == "true" &&
@@ -229,7 +220,6 @@ function pausePlayTimer() {
     pauseTimer();
     // change the button to say "Play"
     document.getElementById("start-button").innerHTML = "Press to Play";
-    console.log("inProgress && !timerPaused");
     changeBackgroundColor("start-button", "#4CAF50");
   } else {
     console.log("something happened");
@@ -252,7 +242,6 @@ function pauseTimer() {
   localStorage.setItem("timerPaused", true);
   timePaused = new Date();
   localStorage.setItem("timePaused", timePaused);
-  console.log("timer endTime paused at " + localStorage.getItem("endTime"));
   // rename the button to be called play now that you have paused it
 }
 
@@ -261,10 +250,6 @@ function playTimer() {
   timerPaused = false;
   localStorage.setItem("timerPaused", false);
   durationPaused = new Date() - Date.parse(localStorage.getItem("timePaused"));
-  console.log(getMinutes(durationPaused));
-  console.log(getSeconds(durationPaused));
-
-  console.log("minutes: " + minutes + ", seconds: " + seconds);
   var end = new Date(localStorage.getItem("endTime"));
   end.setTime(end.getTime() + durationPaused);
   localStorage.setItem("endTime", end);
@@ -307,8 +292,6 @@ function updateTimer() {
       .forEach((value) => value.classList.add("smiley-active"));
   }
 
-  console.log(localStorage.getItem("sectionsOfCycleCompleted"));
-
   if (localStorage.getItem("currentPart") == LONG) {
     localStorage.setItem("isFinalCycle", true);
   }
@@ -347,7 +330,6 @@ function updateButton()
 {
     if(localStorage.getItem("currentPart") == FOCUS)
     {
-      console.log("here1");
       document.getElementById("start-button").innerHTML = "Press to start focusing";
       localStorage.setItem("proceed", "false");
       snoozeButton = document.getElementById("snooze-button");
@@ -355,7 +337,6 @@ function updateButton()
     }
     else if(localStorage.getItem("currentPart") == SHORT)
     {
-      console.log("here2");
       document.getElementById("start-button").innerHTML = "Press to start your short break";
       localStorage.setItem("proceed", "false");
       snoozeButton = document.getElementById("snooze-button");
@@ -363,7 +344,6 @@ function updateButton()
     }
     else if(localStorage.getItem("currentPart") == LONG)
     {
-      console.log("here3");
       document.getElementById("start-button").innerHTML = "Press to start your long break";
       localStorage.setItem("proceed", "false");
       snoozeButton = document.getElementById("snooze-button");
@@ -374,7 +354,6 @@ function updateButton()
 
 // update the cycle counts so that we know where we're headed next
 function updateCycleCounts() {
-  console.log("got out");
   document.getElementById("totalCycles").innerHTML = localStorage.getItem(
     "totalCycles"
   );
@@ -389,12 +368,6 @@ function updateCycleCounts() {
 
 function startTime() {
   endTime = new Date();
-  //console.log("time: "+ endTime);
-
-  // longTime = document.getElementById("longBreak").value;
-  // console.log("starting focus time" + focusTime);
-
-  //console.log("after clicking: "+ endTime);
   currentPart = localStorage.getItem("currentPart");
   var isSnooze = localStorage.getItem("isSnooze");
   if (isSnooze == "true") {
@@ -456,8 +429,6 @@ var x = setInterval(function () {
   var tPaused = localStorage.getItem("timerPaused");
   var iProgress = localStorage.getItem("inProgress");
   distance = parseInt(localStorage.getItem("distance"));
-  console.log(distance);
-  console.log(distance < 0);
   document.getElementById("todaysCycles").innerHTML = localStorage.getItem("todaysCycles");
   document.getElementById("totalCycles").innerHTML = localStorage.getItem("totalCycles");
   if(tPaused=="false" && (iProgress=="true" || distance < 0))
