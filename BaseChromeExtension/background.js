@@ -369,13 +369,13 @@ chrome.alarms.onAlarm.addListener( function (alarm) {
 */
 
 function notifyFocusOver() {
-  audioNotification();
+  // audioNotification();
   createNotification();
   return whichPage();
 }
 
 function notifyBreakOver() {
-  audioNotification();
+  // audioNotification();
   breakOverNotification();
   return whichPage();
 }
