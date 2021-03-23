@@ -12,7 +12,9 @@ alarmid.addEventListener('click', function () {
     // createNotification();
     // audioNotification();
     // localStorage.clear();
-    localStorage.setItem("nudgeState", "reinforce");
+    var px = randomPage(getRandomInt(5));
+
+    localStorage.setItem("nudgeState", px);
     localStorage.setItem("focusTime", "0.01");
     localStorage.setItem("shortBreak", "0.01");
     localStorage.setItem("longBreak", "0.01");
@@ -20,6 +22,26 @@ alarmid.addEventListener('click', function () {
     // win1.close();
 
 });
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
+}
+
+
+function randomPage(x) {
+  switch(x) {
+    case 0:
+      return "default";
+    case 1:
+      return "confront";
+    case 2: 
+      return "facilitate";
+    case 3:
+      return "leveraging";
+    case 4:
+      return "reinforce";
+  }
+}
 
 function audioNotification(){
   var yourSound = new Audio('audio/mario_coin.mp3');
