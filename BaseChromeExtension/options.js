@@ -47,7 +47,6 @@ var currentPart = FOCUS;  // start with the assumption that the user will want t
 var sectionsOfCycleCompleted = 0; // start at 0 sections completed
 var cyclesCompleted = 0;  // start with 0 cycles completed. In the future, this can pull from the chrome plugin
 
-
 /*
 window.alert(localStorage.getItem("focusTime"));
 window.alert(localStorage.getItem("shortBreak"));
@@ -107,6 +106,10 @@ var asd = setInterval( function () {
   .forEach((value) => value.classList.add("smiley-active"));
   }, 1000);
   */
+
+
+// If we need to reset because its a new day and we haven't reset yet, we do it here. 
+resetter();
 
 // We use setInterval instead of just having the for loop by itself
 // This is probably needed because of the querySelector grabbing the cycle initially
@@ -290,10 +293,8 @@ function pausePlayTimer() {
     inProgress = true;
     localStorage.setItem("inProgress", true);
     document.getElementById("start-button").style.backgroundColor = "#FFA500";
-  } else if (
-    localStorage.getItem("inProgress") == "true" &&
-    localStorage.getItem("timerPaused") == "true"
-  ) {
+  } 
+  else if (localStorage.getItem("inProgress") == "true" && localStorage.getItem("timerPaused") == "true") {
     // if the timer is paused
     playTimer();
     // change the button to say "Pause"
@@ -534,6 +535,7 @@ var x = setInterval(function () {
       seconds = checkTime(seconds);
       document.getElementById("txt").innerHTML =
         "Time Remaining: " + minutes + ":" + seconds;
+//      console.log("Time Remaining: " + minutes + ":" + seconds);
         if (localStorage.getItem("isSnooze") == "false") {
           document.getElementById("start-button").innerHTML = "Press to Pause";
           document.getElementById("start-button").style.backgroundColor = "#FFA500";
@@ -560,4 +562,101 @@ var d = setInterval(function () {
 function changeBackgroundColor(name, color)
 {
   document.getElementById(name).style.backgroundColor = color;
+}
+
+
+function resetter() {
+  var d = new Date();
+  if (localStorage.getItem("pomodoroDate") == null) {
+    localStorage.setItem("pomodoroDate", d.getDate());
+  }
+  // If its a new day
+  // Set the date to the new day
+  // Set the cyclestoday to 0
+  // Reset cycle
+  if (localStorage.getItem("pomodoroDate") != d.getDate()) {
+    localStorage.setItem("pomodoroDate", d.getDate());
+    localStorage.setItem("todaysCycles", 0);
+    localStorage.setItem("currentPart", FOCUS);
+    localStorage.setItem("sectionsOfCycleCompleted", 0);
+    localStorage.setItem("inProgress", false);
+    localStorage.setItem("startTime", new Date());
+    localStorage.setItem("endTime", new Date());
+    localStorage.setItem("breaksTaken", 0);
+    localStorage.setItem("goalPomodoros", "0");
+    localStorage.setItem("lastAction", "null");
+    localStorage.setItem("lastLevel", "reinforce/gif/tomato-01.gif");
+    localStorage.setItem("nudgeLevel", 3);
+    localStorage.setItem("completedAny", "false");
+    localStorage.setItem("autoStartTimer", "null");
+
+    localStorage.setItem("isFinalCycle", false);
+    localStorage.setItem("isSnooze", false);
+    localStorage.setItem("timePaused", 0);
+    localStorage.setItem("distance", 0);
+    localStorage.setItem("proceed", "false");
+    localStorage.setItem("timerPaused", false);
+
+    var repeat = true;
+    var nudgesCompleted = JSON.parse(localStorage.getItem("nudgesCompleted"));
+    if (nudgesCompleted.length == 4) {
+      localStorage.setItem("nudgeState", "default");
+      repeat = false;
+    }
+    while (repeat) {
+      switch (getRandomInt(4)) {
+        /*
+        case 0:
+          // default
+          if (!nudgesCompleted.includes('default')) {
+            repeat = false;
+            nudgesCompleted.push('default');
+            localStorage.setItem("nudgesCompleted", JSON.stringify(nudgesCompleted));
+            localStorage.setItem("nudgeState", "default");
+          }
+          break;
+          */
+        case 0:
+          // confront
+          if (!nudgesCompleted.includes('confront')) {
+            repeat = false;
+            nudgesCompleted.push('confront');
+            localStorage.setItem("nudgesCompleted", JSON.stringify(nudgesCompleted));
+            localStorage.setItem("nudgeState", "confront");
+          }
+          break;
+        case 1:
+          // facilitate
+          if (!nudgesCompleted.includes('facilitate')) {
+            repeat = false;
+            nudgesCompleted.push('facilitate');
+            localStorage.setItem("nudgesCompleted", JSON.stringify(nudgesCompleted));
+            localStorage.setItem("nudgeState", "facilitate");
+          }
+          break;
+        case 2:
+          // leveraging
+          if (!nudgesCompleted.includes('leveraging')) {
+            repeat = false;
+            nudgesCompleted.push('leveraging');
+            localStorage.setItem("nudgesCompleted", JSON.stringify(nudgesCompleted));
+            localStorage.setItem("nudgeState", "leveraging");
+          }
+          break;
+        case 3:
+          // reinforce
+          if (!nudgesCompleted.includes('reinforce')) {
+            repeat = false;
+            nudgesCompleted.push('reinforce');
+            localStorage.setItem("nudgesCompleted", JSON.stringify(nudgesCompleted));
+            localStorage.setItem("nudgeState", "reinforce");
+          }
+          break;
+      }
+    }
+  }
+}
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
 }

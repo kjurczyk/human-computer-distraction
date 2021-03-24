@@ -136,11 +136,15 @@ function timerLoopFunction() {
 }
 
 var y = setInterval(function () {
+  var date = new Date();
+  if (localStorage.getItem("pomodoroDate") == null || localStorage.getItem("pomodoroDate") != date.getDate()){
+    localStorage.setItem("pomodoroDate", date.getDate());
+  }
   timerLoopFunction();
 }, 1000);
 
 var dateLoop = setInterval(function () {
-  d = new Date();
+  var d = new Date();
   if (localStorage.getItem("pomodoroDate") == null) {
     localStorage.setItem("pomodoroDate", d.getDate());
   }
@@ -161,6 +165,15 @@ var dateLoop = setInterval(function () {
     localStorage.setItem("lastAction", "null");
     localStorage.setItem("lastLevel", "reinforce/gif/tomato-01.gif");
     localStorage.setItem("nudgeLevel", 3);
+    localStorage.setItem("completedAny", "false");
+    localStorage.setItem("autoStartTimer", "null");
+
+    localStorage.setItem("isFinalCycle", false);
+    localStorage.setItem("isSnooze", false);
+    localStorage.setItem("timePaused", 0);
+    localStorage.setItem("distance", 0);
+    localStorage.setItem("proceed", "false");
+    localStorage.setItem("timerPaused", false);
 
     var repeat = true;
     var nudgesCompleted = JSON.parse(localStorage.getItem("nudgesCompleted"));
@@ -220,7 +233,7 @@ var dateLoop = setInterval(function () {
       }
     }
   }
-}, 600000);
+}, 30000);
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
