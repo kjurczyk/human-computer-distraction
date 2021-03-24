@@ -109,6 +109,9 @@ chrome.runtime.onInstalled.addListener(function () {
   if (localStorage.getItem("autoStartTimer") == null){
     localStorage.setItem("autoStartTimer", "null");
   }
+  if (localStorage.getItem("breaksSkipped") == null){
+    localStorage.setItem("breaksSkipped", 0);
+  }
 });
 
 // Should we clear right away
@@ -290,8 +293,10 @@ function updateTimer() {
 
 function updateCycleCounts()
 {
+  console.log("PRE:");
   var isSnooze = localStorage.getItem("isSnooze");
   if (isSnooze == "true") {
+    console.log("here");
     var html = notifyFocusOver();
     chrome.tabs.create({url: html});
     parent.focus();
@@ -301,7 +306,8 @@ function updateCycleCounts()
   currentPart = localStorage.getItem("currentPart");
   sectionsOfCycleCompleted = localStorage.getItem("sectionsOfCycleCompleted");
   localStorage.setItem("completedAny", "true");
-
+  console.log("CURRENTPART: " + currentPart);
+  console.log("SECTIONS: " + sectionsOfCycleCompleted);
   if(currentPart == "0")
   {
     var html = notifyFocusOver();

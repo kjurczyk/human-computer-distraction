@@ -19,7 +19,6 @@
 var focusTime = document.getElementById("focusTime");
 var shortBreak = document.getElementById("shortBreak");
 var longBreak = document.getElementById("longBreak");
-var snooze = document.getElementById("snooze");
 var updateId = document.getElementById("update-settings");
 
 var todaysCycles = 0;
@@ -84,7 +83,6 @@ document.getElementById("shortBreak").value = localStorage.getItem(
   "shortBreak"
 );
 document.getElementById("longBreak").value = localStorage.getItem("longBreak");
-document.getElementById("snooze").value = localStorage.getItem("snooze");
 
 document.getElementById("todaysCycles").innerHTML = localStorage.getItem("todaysCycles");
 document.getElementById("totalCycles").innerHTML = localStorage.getItem("totalCycles");
@@ -163,9 +161,12 @@ var badgeLoop = setInterval( function () {
 }, 1000);
   
 if (localStorage.getItem("autoStartTimer") == "snooze") {
-  snoozeTimer();
+  skipBreak();
   localStorage.setItem("autoStartTimer", "null");
   localStorage.setItem("lastAction", "snooze");
+  var breaksSkipped = localStorage.getItem("breaksSkipped");
+  breaksSkipped++;
+  localStorage.setItem("breaksSkipped", breaksSkipped)
 }
 if (localStorage.getItem("autoStartTimer") == "start") {
   pausePlayTimer();
@@ -184,9 +185,6 @@ if (localStorage.getItem("timerPaused")=="false" && localStorage.getItem("inProg
     if (localStorage.getItem("isSnooze") == "false") {
       document.getElementById("start-button").innerHTML = "Press to Pause";
       document.getElementById("start-button").style.backgroundColor = "#FFA500";
-    }
-    if (localStorage.getItem("isSnooze") == "true") {
-      document.getElementById("start-button").style.display = "none";
     }
   }
 } else {
@@ -222,27 +220,21 @@ updateId.addEventListener('click', function () {
     focusTime = document.getElementById("focusTime");
     shortBreak = document.getElementById("shortBreak");
     longBreak = document.getElementById("longBreak");
-    snooze = document.getElementById("snooze");
-    if (isNaN(focusTime.value) || focusTime.value < 1) {
+    if (isNaN(focusTime.value) || focusTime.value < 0) {
       window.alert("Please make sure all times are at least 1 minute");
       return;
     }
-    if (isNaN(shortBreak.value) || shortBreak.value < 1) {
+    if (isNaN(shortBreak.value) || shortBreak.value < 0) {
       window.alert("Please make sure all times are at least 1 minute");
       return;
     }
-    if (isNaN(longBreak.value) || longBreak.value < 1) {
+    if (isNaN(longBreak.value) || longBreak.value < 0) {
       window.alert("Please make sure all times are at least 1 minute");
-      return;
-    }
-    if (isNaN(snooze.value) || snooze.value < 1 || snooze.value >= 30) {
-      window.alert("Please make sure all times are at least 1 minute.  Snooze also cannot be greater than 30 minutes.");
       return;
     }
     localStorage.setItem("focusTime", focusTime.value);
     localStorage.setItem("shortBreak", shortBreak.value);
     localStorage.setItem("longBreak", longBreak.value);
-    localStorage.setItem("snooze", snooze.value);
 
     window.alert("Successfully updated timers!");
 })
@@ -272,13 +264,43 @@ function fourthPomodoro() {
 
 // all the listeners
 document.getElementById("start-button").addEventListener("click", function() {
+  snoozeButton = document.getElementById("snooze-button");
+  snoozeButton.style.display = "none";
   pausePlayTimer()});
 document.getElementById("snooze-button").addEventListener("click", function() {
-  snoozeTimer();
+  // snoozeTimer();
+  localStorage.setItem("lastAction", "snooze");
+  skipBreak();
+  breaksSkipped = localStorage.getItem("breaksSkipped");
+  breaksSkipped++;
+  localStorage.setItem("breaksSkipped", breaksSkipped)
 });
 
 function startTimer() {
   startTime();
+}
+
+function skipBreak() {
+  currentPart = localStorage.getItem("currentPart");
+  sectionsOfCycleCompleted = localStorage.getItem("sectionsOfCycleCompleted");
+  if (currentPart == SHORT) {
+    sectionsOfCycleCompleted++;
+  }
+  else if (currentPart == LONG) {
+    sectionsOfCycleCompleted = 0;
+    if (localStorage.getItem("todaysCycles") == 0) {
+      var temp = localStorage.getItem("totalCycles");
+      temp++;
+      localStorage.setItem("totalCycles", temp);
+    }
+    temp = localStorage.getItem("todaysCycles");
+    temp++;
+    localStorage.setItem("todaysCycles", temp);
+  }
+  localStorage.setItem("currentPart", currentPart);
+  localStorage.setItem("sectionsOfCycleCompleted", sectionsOfCycleCompleted);
+  localStorage.setItem("currentPart", FOCUS);
+  pausePlayTimer();
 }
 
 // decide whether to call the pause or play functino
@@ -314,16 +336,6 @@ function pausePlayTimer() {
   }
 }
 
-
-function snoozeTimer() {
-  closeMeOut = true;
-  document.getElementById("start-button").style.display = "none";
-  document.getElementById("snooze-button").style.display = "none";
-  localStorage.setItem("isSnooze", true);
-  startTimer();
-  localStorage.setItem("timerPaused", false);
-  localStorage.setItem("inProgress", true);
-}
 //pause the timer
 function pauseTimer() {
   timerPaused = true;
@@ -355,14 +367,6 @@ function updateTimer() {
   // clearInterval(x);
   document.getElementById("txt").innerHTML = "Time's up!";
   // increase the current part, as long as
-  if (localStorage.getItem("isSnooze") == "true") {
-    localStorage.setItem("isSnooze", false);
-    inProgress = false;
-    localStorage.setItem("timerPaused", false);
-    document.getElementById("start-button").style.display = "block";
-    document.getElementById("snooze-button").style.display = "block";
-    return;
-  }
   if (localStorage.getItem("currentPart") == FOCUS) {
     document
       .querySelectorAll(
@@ -457,13 +461,7 @@ function updateCycleCounts() {
 function startTime() {
   endTime = new Date();
   currentPart = localStorage.getItem("currentPart");
-  var isSnooze = localStorage.getItem("isSnooze");
-  if (isSnooze == "true") {
-    var snoozeTime = document.getElementById("snooze").value;
-    endTime.setTime(endTime.getTime() + snoozeTime * 60000);
-    localStorage.setItem("endTime", endTime);
-  }
-  else if(currentPart == FOCUS)
+  if(currentPart == FOCUS)
   {
     focusTime = document.getElementById("focusTime").value;
     endTime.setTime(endTime.getTime() + focusTime * 60000);
@@ -539,9 +537,6 @@ var x = setInterval(function () {
         if (localStorage.getItem("isSnooze") == "false") {
           document.getElementById("start-button").innerHTML = "Press to Pause";
           document.getElementById("start-button").style.backgroundColor = "#FFA500";
-        }
-        if (localStorage.getItem("isSnooze") == "true") {
-          document.getElementById("start-button").style.display = "none";
         }
     }
   }

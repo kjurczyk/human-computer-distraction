@@ -67,6 +67,10 @@ startButton.addEventListener('click', function () {
 })
 
 snoozeButton.addEventListener('click', function () {
+    if (localStorage.getItem("goalPomodoros") <= 0) {
+        window.alert("Please enter a goal before you continue! Make sure to click \"Update my settings\".");
+        return;
+    }
     localStorage.setItem("autoStartTimer", "snooze");
     window.close();
     chrome.tabs.create({url: "options.html"});
