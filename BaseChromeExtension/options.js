@@ -463,7 +463,7 @@ function startTime() {
   currentPart = localStorage.getItem("currentPart");
   if(currentPart == FOCUS)
   {
-    focusTime = document.getElementById("focusTime").value;
+    focusTime = localStorage.getItem("focusTime");
     endTime.setTime(endTime.getTime() + focusTime * 60000);
     localStorage.setItem("endTime", endTime);
     snoozeButton = document.getElementById("snooze-button");
@@ -473,7 +473,7 @@ function startTime() {
   }
   else if(currentPart == SHORT)
   {
-    shortTime = document.getElementById("shortBreak").value;
+    shortTime = localStorage.getItem("shortBreak");
     endTime.setTime(endTime.getTime() + shortTime * 60000);
     localStorage.setItem("endTime", endTime);
     localStorage.setItem("lastAction", "break");
@@ -485,7 +485,7 @@ function startTime() {
   }
   else if (currentPart == LONG)
   {
-    longTime = document.getElementById("longBreak").value;
+    longTime = localStorage.getItem("longBreak");
     endTime.setTime(endTime.getTime() + longTime * 60000);
     localStorage.setItem("endTime", endTime);
     localStorage.setItem("lastAction", "break");
@@ -533,7 +533,7 @@ var x = setInterval(function () {
       seconds = checkTime(seconds);
       document.getElementById("txt").innerHTML =
         "Time Remaining: " + minutes + ":" + seconds;
-//      console.log("Time Remaining: " + minutes + ":" + seconds);
+      // console.log("Time Remaining: " + minutes + ":" + seconds);
         if (localStorage.getItem("isSnooze") == "false") {
           document.getElementById("start-button").innerHTML = "Press to Pause";
           document.getElementById("start-button").style.backgroundColor = "#FFA500";
@@ -584,7 +584,9 @@ function resetter() {
     localStorage.setItem("nudgeLevel", 3);
     localStorage.setItem("completedAny", "false");
     localStorage.setItem("autoStartTimer", "null");
+    localStorage.setItem("timerPaused", "false");
 
+    localStorage.setItem("inProgress", "false");
     localStorage.setItem("isFinalCycle", false);
     localStorage.setItem("isSnooze", false);
     localStorage.setItem("timePaused", 0);

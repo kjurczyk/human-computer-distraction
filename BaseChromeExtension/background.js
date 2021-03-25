@@ -170,7 +170,9 @@ var dateLoop = setInterval(function () {
     localStorage.setItem("nudgeLevel", 3);
     localStorage.setItem("completedAny", "false");
     localStorage.setItem("autoStartTimer", "null");
+    localStorage.setItem("timerPaused", "false");
 
+    localStorage.setItem("inProgress", "false");
     localStorage.setItem("isFinalCycle", false);
     localStorage.setItem("isSnooze", false);
     localStorage.setItem("timePaused", 0);
@@ -271,8 +273,9 @@ function updateTimer() {
   var end = localStorage.getItem("endTime");
   end = Date.parse(end);
   var distance = end - now;
+  // console.log("distance: " + distance);
+  var ignoreThisVar = distance + distance - distance;
   localStorage.setItem("distance", distance);
-  //console.log("distance", distance);
   // If the count down is over, write some text
   if (distance < 0) {
     // clearInterval(x);
@@ -293,10 +296,8 @@ function updateTimer() {
 
 function updateCycleCounts()
 {
-  console.log("PRE:");
   var isSnooze = localStorage.getItem("isSnooze");
   if (isSnooze == "true") {
-    console.log("here");
     var html = notifyFocusOver();
     chrome.tabs.create({url: html});
     parent.focus();
@@ -306,8 +307,6 @@ function updateCycleCounts()
   currentPart = localStorage.getItem("currentPart");
   sectionsOfCycleCompleted = localStorage.getItem("sectionsOfCycleCompleted");
   localStorage.setItem("completedAny", "true");
-  console.log("CURRENTPART: " + currentPart);
-  console.log("SECTIONS: " + sectionsOfCycleCompleted);
   if(currentPart == "0")
   {
     var html = notifyFocusOver();
