@@ -563,12 +563,16 @@ function resetter() {
   var d = new Date();
   if (localStorage.getItem("pomodoroDate") == null) {
     localStorage.setItem("pomodoroDate", d.getDate());
+    console.log("ITS NULL");
   }
   // If its a new day
   // Set the date to the new day
   // Set the cyclestoday to 0
   // Reset cycle
   if (localStorage.getItem("pomodoroDate") != d.getDate()) {
+    console.log("RESETTING VIA OPTIONS: ");
+    console.log("pdate : " + localStorage.getItem("pomodoroDate"));
+    console.log("date from var : " + d.getDate());
     localStorage.setItem("pomodoroDate", d.getDate());
     localStorage.setItem("todaysCycles", 0);
     localStorage.setItem("currentPart", FOCUS);
@@ -651,8 +655,6 @@ function resetter() {
       }
     }
   }
-  localStorage.setItem("pomodoroDate", "12");
-
 }
 
 function getRandomInt(max) {
