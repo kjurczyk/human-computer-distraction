@@ -238,7 +238,7 @@ var dateLoop = setInterval(function () {
       }
     }
   }
-}, 30000);
+}, 600000);
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));

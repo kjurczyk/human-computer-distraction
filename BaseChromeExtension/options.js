@@ -51,7 +51,6 @@ window.alert(localStorage.getItem("focusTime"));
 window.alert(localStorage.getItem("shortBreak"));
 window.alert(localStorage.getItem("longBreak"));
 */
-
 if (localStorage.getItem("focusTime") == null) {
   localStorage.setItem("focusTime", 25);
 }
@@ -107,12 +106,12 @@ var asd = setInterval( function () {
 
 
 // If we need to reset because its a new day and we haven't reset yet, we do it here. 
-resetter();
 
 // We use setInterval instead of just having the for loop by itself
 // This is probably needed because of the querySelector grabbing the cycle initially
 // And we need it to grab it after that -- so we just use a setInterval to grab it again.
 var badgeLoop = setInterval( function () {
+  resetter();
   for (var i = 0; i <= parseInt(localStorage.getItem("sectionsOfCycleCompleted")); i++) {
     
     // This makes sure that the last emoji (id = 0) is always off when its not final cycle.
@@ -652,6 +651,8 @@ function resetter() {
       }
     }
   }
+  localStorage.setItem("pomodoroDate", "12");
+
 }
 
 function getRandomInt(max) {
