@@ -139,19 +139,22 @@ function timerLoopFunction() {
 }
 
 var y = setInterval(function () {
-  var date = new Date();
+  /*var date = new Date();
+  
   if (localStorage.getItem("pomodoroDate") == null || localStorage.getItem("pomodoroDate") != date.getDate()){
     localStorage.setItem("pomodoroDate", date.getDate());
-  }
+  }*/
   timerLoopFunction();
 }, 1000);
 
 var dateLoop = setInterval(function () {
   var d = new Date();
+  /*
   if (localStorage.getItem("pomodoroDate") == null) {
     localStorage.setItem("pomodoroDate", d.getDate());
     console.log("ITS NULL");
   }
+  */
   // If its a new day
   // Set the date to the new day
   // Set the cyclestoday to 0
@@ -242,7 +245,7 @@ var dateLoop = setInterval(function () {
       }
     }
   }
-}, 600000);
+}, 300000);
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));

@@ -561,10 +561,11 @@ function changeBackgroundColor(name, color)
 
 function resetter() {
   var d = new Date();
+  /*
   if (localStorage.getItem("pomodoroDate") == null) {
     localStorage.setItem("pomodoroDate", d.getDate());
     console.log("ITS NULL");
-  }
+  }*/
   // If its a new day
   // Set the date to the new day
   // Set the cyclestoday to 0
