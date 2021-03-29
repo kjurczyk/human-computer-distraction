@@ -103,7 +103,7 @@ chrome.runtime.onInstalled.addListener(function () {
     localStorage.setItem("breaksTaken", 0);
   }
   if (localStorage.getItem("nudgesCompleted") == null){
-    var n = [];
+    var n = [localStorage.getItem("nudgeState")];
     localStorage.setItem("nudgesCompleted", JSON.stringify(n));
   }
   if (localStorage.getItem("autoStartTimer") == null){
