@@ -1,0 +1,28 @@
+  {
+    "name": "Romadoro",
+    "version": "1.0",
+    "description": "Building a Chrome extension to help you take Pomodoros.",
+    "permissions": ["notifications"],
+    "options_page": "options.html",
+    "background": {
+      "scripts": ["background.js"]
+    },
+    "content_security_policy": "script-src 'self'  https://apis.google.com; object-src 'self'",
+    "page_action": {
+      "default_popup": "popup.html",
+      "default_icon": {
+        "16": "images/teapot.png",
+        "32": "images/teapot.png",
+        "48": "images/teapot.png",
+        "128": "images/teapot.png"
+      }
+    },
+    "icons": {
+      "16": "images/teapot.png",
+      "32": "images/teapot.png",
+      "48": "images/teapot.png",
+      "128": "images/teapot.png"
+    },
+    "manifest_version": 2
+  }
+  

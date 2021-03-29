@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.4.0/css/all.min.css">
+	<link href="https://fonts.googleapis.com/css2?family=Crimson+Text&family=Ultra&family=Wendy+One&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="options-styles.css" />
+	<link rel="stylesheet" href="style.css"/>
+	<script src="jquery.min.js"></script>
+  </head>
+
+	<body>
+		<div class="container pt-3 shadow-lg rounded">
+			<div class="row">
+				<div class="col-md-6">
+					<img class="img-fluid" src="images/Time.png" alt="Graphic design showing people working on laptops. There is a calendar in the background and a huge clock in the middle.">
+				</div>
+				<div class="col-md-6 my-auto">
+					<h3 class="subtitle">Welcome to</h3>
+					<h1 id="title">Pomodoro Dashboard</h1>
+					<h4 class="subtitle">You can see your progress here and change the settings.</h4>
+				</div>
+			</div>
+			<div class="row">
+				<!-- The setting panel -->
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-md-11 mx-auto p-2 mb-2 rounded header">
+							<h4 class="mb-0 text-white text-center"><i class="fad fa-sliders-h"></i> Settings</h4>
+						</div>
+						<div class="form-inline col-md-11 mx-auto p-2">
+							<div class="form-group col-md-12 mx-auto p-0 mb-1">
+								<h6 class="subtitle text-left">You can modify your task focus time, your pomodoro short break, and length of the long break after finishing every third pomodoro cycle. 
+									For best results, we recommend using 25, 5, and 30 minutes respectively. </h6>
+							</div>
+							<div class="form-group row ml-4 mb-3 mx-auto">
+								<label for="focusTime" class="col-md-5 col-form-label subtitle">Focus Time:</label>
+								<div class="col-md-7 p-0">
+									<input type="number" class="form-control" value="25" placeholder="Enter task duration..." id="focusTime">
+								</div>
+							</div>
+							<div class="form-group row ml-4 mb-3 mx-auto">
+								<label for="shortBreak" class="col-md-5 col-form-label subtitle">Short Break:</label>
+								<div class="col-md-7 p-0">
+									<input type="number" class="form-control" value="5" placeholder="Enter short break... " id="shortBreak">
+								</div>
+							</div>
+							<div class="form-group row ml-4 mb-3 mx-auto">
+								<label for="longBreak" class="col-md-5 col-form-label subtitle">Long Break:</label>
+								<div class="col-md-7 p-0">
+									<input type="number" class="form-control" value="30" placeholder="Enter long break... " id="longBreak">
+								</div>
+							</div>
+							<div class="col-md-12 mb-4">
+								<button id="update-settings" class="btn btn-outline-light btn-block" type="button">Update my settings</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Today's Progress Panel -->
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-md-11 mx-auto p-2 mb-2 rounded header">
+							<h4 class="mb-0 text-white text-center"><i class="fad fa-calendar-day"></i> Today's Progress</h4>
+						</div>
+						<div class="col-md-11 mx-auto">
+							<div class="row mb-3">
+								<div class="col-md-6">
+									<h5 class="my-auto streak text-center">
+										Today's Total Cycles: 
+										<span class="fa-layers fa-fw" style="font-size: 2.5rem;">
+											<i class="fas fa-certificate"></i>
+											<span class="fa-layers-text fa-inverse" data-fa-transform="shrink-9" id = "todaysCycles" >0</span>
+										</span>
+									</h5>
+								</div>
+								<div class="col-md-6">
+									<h5 class="my-auto streak text-center">
+										Total Days on Streak: 
+										<span class="fa-layers fa-fw" style="font-size: 2.5rem;">
+											<i class="fas fa-certificate"></i>
+											<span class="fa-layers-text fa-inverse" data-fa-transform="shrink-9" id = "totalCycles">0</span>
+										</span>
+									</h5>
+								</div>
+							</div>
+							<div class="row rounded bg-white">
+								<div class="col-md-4 border-right my-auto">
+									<h5 class="smiley-title">Current Cycle</h5>
+								</div>
+								<div class="col-md-2 border-right my-auto text-center">
+									<span class="fa-layers fa-fw" id="cycle1">
+										<i class="fas fa-circle default smiley-active" data-fa-transform="shrink-1" ></i>
+										<i class="fad fa-smile default smiley-active"></i>
+									</span>
+								</div>
+								<div class="col-md-2 border-right my-auto text-center">
+									<span class="fa-layers fa-fw" id="cycle2">
+										<i class="fas fa-circle default" data-fa-transform="shrink-1"></i>
+										<i class="fad fa-smile-beam default"></i>
+									</span>
+								</div>
+								<div class="col-md-2 border-right my-auto text-center">
+									<span id="cycle3">
+										<i class="fad fa-grin-beam default"></i>
+									</span>
+								</div>
+								<div class="col-md-2 my-auto text-center">
+									<span class="fa-stack fa-2x mt-3" id="cycle0">
+										<i id="fourthPomodoro" class="fad fa-grin-hearts fa-stack-1x default" data-fa-transform="up-4"></i>
+										<i class="fad fa-crown fa-stack-2x default" data-fa-transform="shrink-12 up-6 rotate-45"></i>
+									</span>
+								</div>
+							</div>
+
+							<div id="txt" class="my-auto streak text-center" style="font-size: 2.5rem;">Press start to begin the first cycle</div>
+							<button id="start-button" class="btn btn-outline-light btn-block" style="background-color: #4CAF50;" type="button">Start</button>
+							<!-- partial:index.partial.html -->
+							<button id="snooze-button" class="btn btn-outline-light btn-block" style="background-color: #ff3535; display: none" type="button">Skip my break</button>
+
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+  </body>
+	<script src="/libraries/jquery.min.js"></script>
+	<script src="/libraries/popper.min.js"></script>
+	<script src="/libraries/bootstrap.min.js"></script>
+	<script src="/libraries/all.js"></script>
+	<script src="options.js"></script>
+	<!-- <script src="popup.js"></script> -->
+</html>
