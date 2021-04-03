@@ -23,7 +23,11 @@ if (r == 7) {
 if (r >= 9) {
     tip = "Not So Fun Fact: ";
 }
+localStorage.setItem("confrontQuote", confronts[r]);
 
+var confrontsList = JSON.parse(localStorage.getItem("completeListOfConfrontsGiven"));
+confrontsList.push(confronts[r]);
+localStorage.setItem("completeListOfConfrontsGiven", confrontsList);
 switch (localStorage.getItem("currentPart")) {
     case "0":
         // focus
@@ -35,12 +39,14 @@ switch (localStorage.getItem("currentPart")) {
         // short
         startButton.innerHTML = "Start short break";
         notificationContent.innerHTML = tip + confronts[r];
+        localStorage.setItem("typeOfBreak", "shortBreak");
         break;
 
     case "2":
         // long
         startButton.innerHTML = "Start long break";
         notificationContent.innerHTML = tip + confronts[r];
+        localStorage.setItem("typeOfBreak", "longBreak");
         break;
 
     default:

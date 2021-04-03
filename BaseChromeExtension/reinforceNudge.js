@@ -17,6 +17,7 @@ pngs.push("reinforce/img/deadtomato-03.png");
 
 var lastLevel = localStorage.getItem("lastLevel");
 var lastAction = localStorage.getItem("lastAction");
+localStorage.setItem("reinforceLevelWhenSkipped", lastLevel);
 var which = lastLevel;
     if (lastLevel.includes(gifs[0])) {
         if (lastAction == "break") {
@@ -124,6 +125,9 @@ var which = lastLevel;
     }
 tomatoGif.src = which;
 localStorage.setItem("lastLevel", which);
+var reinforceSequence = JSON.parse(localStorage.getItem("reinforceSequence"));
+reinforceSequence.push(which);
+localStorage.setItem("reinforceSequence", JSON.stringify(reinforceSequence));
 switch (localStorage.getItem("currentPart")) {
     case "0":
         // focus
@@ -134,12 +138,14 @@ switch (localStorage.getItem("currentPart")) {
     case "1":
         // short
         startButton.innerHTML = "Start short break";
+        localStorage.setItem("typeOfBreak", "shortBreak");
         // timeIsUp.innerHTML = tip + confronts[r];
         break;
 
     case "2":
         // long
         startButton.innerHTML = "Start long break";
+        localStorage.setItem("typeOfBreak", "longBreak");
         // notificationContent.innerHTML = tip + confronts[r];
         break;
 

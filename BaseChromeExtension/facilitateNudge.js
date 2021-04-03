@@ -14,11 +14,13 @@ switch (localStorage.getItem("currentPart")) {
     case "1":
         // short
         startButton.innerHTML = "Start short break";
+        localStorage.setItem("typeOfBreak", "shortBreak");
         break;
 
     case "2":
         // long
         startButton.innerHTML = "Start long break";
+        localStorage.setItem("typeOfBreak", "longBreak");
         break;
 
     default:

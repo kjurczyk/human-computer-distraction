@@ -112,6 +112,46 @@ chrome.runtime.onInstalled.addListener(function () {
   if (localStorage.getItem("breaksSkipped") == null){
     localStorage.setItem("breaksSkipped", 0);
   }
+  localStorage.setItem("confrontQuote", "");
+  localStorage.setItem("typeOfBreak", "");
+  localStorage.setItem("reinforceLevelWhenSkipped", "");
+  localStorage.setItem("completeListOfConfrontsGiven", JSON.stringify([]));
+
+  localStorage.setItem("timeElapsedStart", "");
+  localStorage.setItem("timeElapsedEnd", "");
+
+  localStorage.setItem("numReinforceBreaksSkipped", 0);
+  localStorage.setItem("numLeveragingBreaksSkipped", 0);
+  localStorage.setItem("numConfrontBreaksSkipped", 0);
+  localStorage.setItem("numFacilitateBreaksSkipped", 0);
+
+  localStorage.setItem("numReinforceBreaksTaken", 0);
+  localStorage.setItem("numLeveragingBreaksTaken", 0);
+  localStorage.setItem("numConfrontBreaksTaken", 0);
+  localStorage.setItem("numFacilitateBreaksTaken", 0);
+
+  // List nudge tactic (i.e., which stage)
+  // List time stamp
+  // List focus time, short break time, and long break time
+  // specificy if long break or short break
+  localStorage.setItem("reinforceBreaksSkipped", JSON.stringify([]));
+  localStorage.setItem("leveragingBreaksSkipped", JSON.stringify([]));
+  localStorage.setItem("confrontBreaksSkipped", JSON.stringify([]));
+  localStorage.setItem("facilitateBreaksSkipped", JSON.stringify([]));
+
+  // List nudge tactic (i.e., which stage)
+  // List time stamp
+  // List focus time, short break time, and long break time
+  // specificy if long break or short break
+  localStorage.setItem("reinforceBreaksTaken", JSON.stringify([]));
+  localStorage.setItem("leveragingBreaksTaken", JSON.stringify([]));
+  localStorage.setItem("confrontBreaksTaken", JSON.stringify([]));
+  localStorage.setItem("facilitateBreaksTaken", JSON.stringify([]));
+
+  localStorage.setItem("totalGoalPomodoros", JSON.stringify([]));
+  localStorage.setItem("reinforceSequence", JSON.stringify(["reinforce/gif/tomato-01.gif"]));
+  // comment 1
+  // comment
 });
 
 // Should we clear right away
@@ -186,6 +226,11 @@ var dateLoop = setInterval(function () {
     localStorage.setItem("distance", 0);
     localStorage.setItem("proceed", "false");
     localStorage.setItem("timerPaused", false);
+
+    localStorage.setItem("timeElapsedStart", "");
+    localStorage.setItem("timeElapsedEnd", "");
+    localStorage.setItem("typeOfBreak", "");
+
 
     var repeat = true;
     var nudgesCompleted = JSON.parse(localStorage.getItem("nudgesCompleted"));
@@ -316,8 +361,8 @@ function updateCycleCounts()
   localStorage.setItem("completedAny", "true");
   if(currentPart == "0")
   {
+    localStorage.setItem("timeElapsedStart", new Date());
     var html = notifyFocusOver();
-
     chrome.tabs.create({url: html});
     parent.focus();
     window.focus();
@@ -332,8 +377,8 @@ function updateCycleCounts()
   }
   else if(currentPart == "1")  // the next part is definitely focus
   {
+    localStorage.setItem("timeElapsedStart", new Date());
     html = notifyBreakOver();
-
     chrome.tabs.create({url: html});
     parent.focus();
     window.focus();
@@ -343,8 +388,8 @@ function updateCycleCounts()
   }
   else  // the only other option is to currently be in a long 
   {
+    localStorage.setItem("timeElapsedStart", new Date());
     html = notifyBreakOver();
-
     chrome.tabs.create({url: html});
     parent.focus();
     window.focus();

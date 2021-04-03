@@ -280,6 +280,60 @@ function startTimer() {
 }
 
 function skipBreak() {
+  var curDate = new Date();
+  var nudgeTracker;
+  var numBreaksSkipped;
+  var insert;
+  var timeElapsed;
+  switch (localStorage.getItem("nudgeState")) {
+    case "reinforce":
+      nudgeTracker = JSON.parse(localStorage.getItem("reinforceBreaksSkipped"));
+      timeElapsed = curDate - Date.parse(localStorage.getItem("timeElapsedStart"));
+      timeElapsed = Math.round(timeElapsed / 1000);
+      insert = ["Timestamp: " + curDate.toString(), "Reinforce Level When Skipped: " + localStorage.getItem("reinforceLevelWhenSkipped"), "focusTime: " + localStorage.getItem("focusTime"), "shortBreak: " + localStorage.getItem("shortBreak"), "longBreak: " + localStorage.getItem("longBreak"), "Break Skipped: " + localStorage.getItem("typeOfBreak"), "Time Elapsed Since Focus: " + timeElapsed];
+      nudgeTracker.push(insert);
+      localStorage.setItem("reinforceBreaksSkipped", JSON.stringify(nudgeTracker));
+      numBreaksSkipped = localStorage.getItem("numReinforceBreaksSkipped");
+      numBreaksSkipped++;
+      localStorage.setItem("numReinforceBreaksSkipped", numBreaksSkipped);
+      break;
+    case "leveraging":
+      nudgeTracker = JSON.parse(localStorage.getItem("leveragingBreaksSkipped"));
+      timeElapsed = curDate - Date.parse(localStorage.getItem("timeElapsedStart"));
+      timeElapsed = Math.round(timeElapsed / 1000);
+      insert = ["Timestamp: " + curDate.toString(), "Break Goal When Skipped: " + localStorage.getItem("goalPomodoros"), "focusTime: " + localStorage.getItem("focusTime"), "shortBreak: " + localStorage.getItem("shortBreak"), "longBreak: " + localStorage.getItem("longBreak"), "Break Skipped: " + localStorage.getItem("typeOfBreak"), "Time Elapsed Since Focus: " + timeElapsed];
+      nudgeTracker.push(insert);
+      localStorage.setItem("leveragingBreaksSkipped", JSON.stringify(nudgeTracker));
+      numBreaksSkipped = localStorage.getItem("numLeveragingBreaksSkipped");
+      numBreaksSkipped++;
+      localStorage.setItem("numLeveragingBreaksSkipped", numBreaksSkipped);
+      break;
+    case "confront":
+      nudgeTracker = JSON.parse(localStorage.getItem("confrontBreaksSkipped"));
+      timeElapsed = curDate - Date.parse(localStorage.getItem("timeElapsedStart"));
+      timeElapsed = Math.round(timeElapsed / 1000);
+      insert = ["Timestamp: " + curDate.toString(), "Confront Quote: " + localStorage.getItem("confrontQuote"), "focusTime: " + localStorage.getItem("focusTime"), "shortBreak: " + localStorage.getItem("shortBreak"), "longBreak: " + localStorage.getItem("longBreak"), "Break Skipped: " + localStorage.getItem("typeOfBreak"), "Time Elapsed Since Focus: " + timeElapsed];
+      nudgeTracker.push(insert);
+      localStorage.setItem("confrontBreaksSkipped", JSON.stringify(nudgeTracker));
+      numBreaksSkipped = localStorage.getItem("numConfrontBreaksSkipped");
+      numBreaksSkipped++;
+      localStorage.setItem("numConfrontBreaksSkipped", numBreaksSkipped);
+      break;
+    case "facilitate":
+      nudgeTracker = JSON.parse(localStorage.getItem("facilitateBreaksSkipped"));
+      timeElapsed = curDate - Date.parse(localStorage.getItem("timeElapsedStart"));
+      timeElapsed = Math.round(timeElapsed / 1000);
+      insert = ["Timestamp: " + curDate.toString(), "FacilitateNudge", "focusTime: " + localStorage.getItem("focusTime"), "shortBreak: " + localStorage.getItem("shortBreak"), "longBreak: " + localStorage.getItem("longBreak"), "Break Skipped: " + localStorage.getItem("typeOfBreak"), "Time Elapsed Since Focus: " + timeElapsed];
+      nudgeTracker.push(insert);
+      localStorage.setItem("facilitateBreaksSkipped", JSON.stringify(nudgeTracker));
+      numBreaksSkipped = localStorage.getItem("numFacilitateBreaksSkipped");
+      numBreaksSkipped++;
+      localStorage.setItem("numFacilitateBreaksSkipped", numBreaksSkipped);
+      break;
+    default:
+      console.log("Error");
+      break;
+  }
   currentPart = localStorage.getItem("currentPart");
   sectionsOfCycleCompleted = localStorage.getItem("sectionsOfCycleCompleted");
   if (currentPart == SHORT) {
