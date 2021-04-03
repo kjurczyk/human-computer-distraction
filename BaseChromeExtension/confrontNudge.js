@@ -25,9 +25,6 @@ if (r >= 9) {
 }
 localStorage.setItem("confrontQuote", confronts[r]);
 
-var confrontsList = JSON.parse(localStorage.getItem("completeListOfConfrontsGiven"));
-confrontsList.push(confronts[r]);
-localStorage.setItem("completeListOfConfrontsGiven", confrontsList);
 switch (localStorage.getItem("currentPart")) {
     case "0":
         // focus
@@ -40,6 +37,9 @@ switch (localStorage.getItem("currentPart")) {
         startButton.innerHTML = "Start short break";
         notificationContent.innerHTML = tip + confronts[r];
         localStorage.setItem("typeOfBreak", "shortBreak");
+        var confrontsList = JSON.parse(localStorage.getItem("completeListOfConfrontsGiven"));
+        confrontsList.push(confronts[r]);
+        localStorage.setItem("completeListOfConfrontsGiven", JSON.stringify(confrontsList));
         break;
 
     case "2":
@@ -47,6 +47,9 @@ switch (localStorage.getItem("currentPart")) {
         startButton.innerHTML = "Start long break";
         notificationContent.innerHTML = tip + confronts[r];
         localStorage.setItem("typeOfBreak", "longBreak");
+        var confrontsList = JSON.parse(localStorage.getItem("completeListOfConfrontsGiven"));
+        confrontsList.push(confronts[r]);
+        localStorage.setItem("completeListOfConfrontsGiven", JSON.stringify(confrontsList));
         break;
 
     default:

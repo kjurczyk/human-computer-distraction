@@ -114,7 +114,7 @@ chrome.runtime.onInstalled.addListener(function () {
   }
   localStorage.setItem("confrontQuote", "");
   localStorage.setItem("typeOfBreak", "");
-  localStorage.setItem("reinforceLevelWhenSkipped", "");
+  localStorage.setItem("reinforceLevel", "");
   localStorage.setItem("completeListOfConfrontsGiven", JSON.stringify([]));
 
   localStorage.setItem("timeElapsedStart", "");
@@ -149,7 +149,7 @@ chrome.runtime.onInstalled.addListener(function () {
   localStorage.setItem("facilitateBreaksTaken", JSON.stringify([]));
 
   localStorage.setItem("totalGoalPomodoros", JSON.stringify([]));
-  localStorage.setItem("reinforceSequence", JSON.stringify(["reinforce/gif/tomato-01.gif"]));
+  localStorage.setItem("reinforceSequence", JSON.stringify([]));
   // comment 1
   // comment
 });
