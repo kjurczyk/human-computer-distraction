@@ -330,7 +330,7 @@ function nudgeLog(location) {
       break;
     case "confront":
       logObject = createTimeLog("confront", curDate.toString(), localStorage.getItem("focusTime"), localStorage.getItem("shortBreak"), localStorage.getItem("longBreak"), localStorage.getItem("typeOfBreak"), timeElapsed, localStorage.getItem("confrontQuote"));
-      appendLog(logObject, "leveragingBreaks" + location);
+      appendLog(logObject, "confrontBreaks" + location);
 
       numBreaksSkipped = localStorage.getItem("numConfrontBreaks" + location);
       numBreaksSkipped++;
@@ -338,7 +338,7 @@ function nudgeLog(location) {
       break;
     case "facilitate":
       logObject = createTimeLog("facilitate", curDate.toString(), localStorage.getItem("focusTime"), localStorage.getItem("shortBreak"), localStorage.getItem("longBreak"), localStorage.getItem("typeOfBreak"), timeElapsed, "N/A");
-      appendLog(logObject, "leveragingBreaks" + location);
+      appendLog(logObject, "facilitateBreaks" + location);
 
       numBreaksSkipped = localStorage.getItem("numFacilitateBreaks" + location);
       numBreaksSkipped++;
