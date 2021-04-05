@@ -111,6 +111,28 @@ chrome.runtime.onInstalled.addListener(function () {
   if (localStorage.getItem("breaksSkipped") == null){
     localStorage.setItem("breaksSkipped", 0);
   }
+  localStorage.setItem("userID", generateID());
+
+  localStorage.setItem("typeOfBreak", "");
+
+  localStorage.setItem("timeElapsedStart", "");
+  localStorage.setItem("timeElapsedEnd", "");
+
+  localStorage.setItem("numDefaultBreaksSkipped", 0);
+  localStorage.setItem("dailyDefaultBreaksSkipped", JSON.stringify([{brkSkip: 0}]));
+
+  // List nudge tactic (i.e., which stage)
+  // List time stamp
+  // List focus time, short break time, and long break time
+  // specificy if long break or short break
+  localStorage.setItem("defaultBreaksSkipped", JSON.stringify([]));
+
+  // List nudge tactic (i.e., which stage)
+  // List time stamp
+  // List focus time, short break time, and long break time
+  // specificy if long break or short break
+  localStorage.setItem("dailyDefaultBreaksTaken", JSON.stringify([{brkTkn: 0}]));
+  localStorage.setItem("defaultBreaksTaken", JSON.stringify([]));
 });
 
 // Should we clear right away
@@ -169,7 +191,6 @@ var dateLoop = setInterval(function () {
     localStorage.setItem("inProgress", false);
     localStorage.setItem("startTime", new Date());
     localStorage.setItem("endTime", new Date());
-    localStorage.setItem("breaksTaken", 0);
     localStorage.setItem("goalPomodoros", "0");
     localStorage.setItem("lastAction", "null");
     localStorage.setItem("lastLevel", "reinforce/gif/tomato-01.gif");
@@ -185,8 +206,24 @@ var dateLoop = setInterval(function () {
     localStorage.setItem("distance", 0);
     localStorage.setItem("proceed", "false");
     localStorage.setItem("timerPaused", false);
+    
+    localStorage.setItem("timeElapsedStart", "");
+    localStorage.setItem("timeElapsedEnd", "");
+    localStorage.setItem("typeOfBreak", "");
 
     localStorage.setItem("nudgeState", "default");
+
+    localStorage.setItem("numDefaultBreaksTaken", 0);
+
+    localStorage.setItem("numDefaultBreaksSkipped", 0);
+
+    var item = JSON.parse(localStorage.getItem("dailyDefaultBreaksSkipped"));
+    item.append({brkSkip: 0});
+    localStorage.setItem("dailyDefaultBreaksSkipped", JSON.stringify(item));
+
+    var item2 = JSON.parse(localStorage.getItem("dailyDefaultBreaksTaken"));
+    item2.append({brkTkn: 0});
+    localStorage.setItem("dailyDefaultBreaksTkn", JSON.stringify(item2));
   }
 }, 300000);
 
@@ -259,6 +296,7 @@ function updateCycleCounts()
   localStorage.setItem("completedAny", "true");
   if(currentPart == "0")
   {
+    localStorage.setItem("timeElapsedStart", new Date());
     var html = notifyFocusOver();
 
     chrome.tabs.create({url: html});
@@ -275,6 +313,7 @@ function updateCycleCounts()
   }
   else if(currentPart == "1")  // the next part is definitely focus
   {
+    localStorage.setItem("timeElapsedStart", new Date());
     html = notifyBreakOver();
 
     chrome.tabs.create({url: html});
@@ -286,6 +325,7 @@ function updateCycleCounts()
   }
   else  // the only other option is to currently be in a long 
   {
+    localStorage.setItem("timeElapsedStart", new Date());
     html = notifyBreakOver();
 
     chrome.tabs.create({url: html});
@@ -446,6 +486,16 @@ function createNotification() {
     chrome.notifications.create(`focusOver1-${Date.now()}`, opt, function(){ console.log("Last error:", chrome.runtime.lastError);});
     //include this line if you want to clear the notification after 5 seconds
     // setTimeout(function(){chrome.notifications.clear("BreakTimeNotification",function(){});},5000);
+}
+
+function generateID() {
+  var text = "";
+  //"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+  var possible = "abcdefghijklmnopqrstuvwxyz";
+  var number = Math.floor(Math.random() * 10000);
+  for (var i = 0; i < 5; i++)
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+  return text+number;
 }
 
 chrome.notifications.onClicked.addListener(function() {

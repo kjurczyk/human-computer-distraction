@@ -20,6 +20,7 @@ var focusTime = document.getElementById("focusTime");
 var shortBreak = document.getElementById("shortBreak");
 var longBreak = document.getElementById("longBreak");
 var updateId = document.getElementById("update-settings");
+var qualtrics = document.getElementById("qualtrics-button");
 
 var todaysCycles = 0;
 var totalCycles = 0;
@@ -214,6 +215,7 @@ if (localStorage.getItem("timerPaused")=="false" && localStorage.getItem("inProg
 }
 
   
+qualtrics.addEventListener('click', submit);
 
 updateId.addEventListener('click', function () {
     focusTime = document.getElementById("focusTime");
@@ -280,60 +282,7 @@ function startTimer() {
 }
 
 function skipBreak() {
-  var curDate = new Date();
-  var nudgeTracker;
-  var numBreaksSkipped;
-  var insert;
-  var timeElapsed;
-  switch (localStorage.getItem("nudgeState")) {
-    case "reinforce":
-      nudgeTracker = JSON.parse(localStorage.getItem("reinforceBreaksSkipped"));
-      timeElapsed = curDate - Date.parse(localStorage.getItem("timeElapsedStart"));
-      timeElapsed = Math.round(timeElapsed / 1000);
-      insert = ["Timestamp: " + curDate.toString(), "Reinforce Level When Skipped: " + localStorage.getItem("reinforceLevelWhenSkipped"), "focusTime: " + localStorage.getItem("focusTime"), "shortBreak: " + localStorage.getItem("shortBreak"), "longBreak: " + localStorage.getItem("longBreak"), "Break Skipped: " + localStorage.getItem("typeOfBreak"), "Time Elapsed Since Focus: " + timeElapsed];
-      nudgeTracker.push(insert);
-      localStorage.setItem("reinforceBreaksSkipped", JSON.stringify(nudgeTracker));
-      numBreaksSkipped = localStorage.getItem("numReinforceBreaksSkipped");
-      numBreaksSkipped++;
-      localStorage.setItem("numReinforceBreaksSkipped", numBreaksSkipped);
-      break;
-    case "leveraging":
-      nudgeTracker = JSON.parse(localStorage.getItem("leveragingBreaksSkipped"));
-      timeElapsed = curDate - Date.parse(localStorage.getItem("timeElapsedStart"));
-      timeElapsed = Math.round(timeElapsed / 1000);
-      insert = ["Timestamp: " + curDate.toString(), "Break Goal When Skipped: " + localStorage.getItem("goalPomodoros"), "focusTime: " + localStorage.getItem("focusTime"), "shortBreak: " + localStorage.getItem("shortBreak"), "longBreak: " + localStorage.getItem("longBreak"), "Break Skipped: " + localStorage.getItem("typeOfBreak"), "Time Elapsed Since Focus: " + timeElapsed];
-      nudgeTracker.push(insert);
-      localStorage.setItem("leveragingBreaksSkipped", JSON.stringify(nudgeTracker));
-      numBreaksSkipped = localStorage.getItem("numLeveragingBreaksSkipped");
-      numBreaksSkipped++;
-      localStorage.setItem("numLeveragingBreaksSkipped", numBreaksSkipped);
-      break;
-    case "confront":
-      nudgeTracker = JSON.parse(localStorage.getItem("confrontBreaksSkipped"));
-      timeElapsed = curDate - Date.parse(localStorage.getItem("timeElapsedStart"));
-      timeElapsed = Math.round(timeElapsed / 1000);
-      insert = ["Timestamp: " + curDate.toString(), "Confront Quote: " + localStorage.getItem("confrontQuote"), "focusTime: " + localStorage.getItem("focusTime"), "shortBreak: " + localStorage.getItem("shortBreak"), "longBreak: " + localStorage.getItem("longBreak"), "Break Skipped: " + localStorage.getItem("typeOfBreak"), "Time Elapsed Since Focus: " + timeElapsed];
-      nudgeTracker.push(insert);
-      localStorage.setItem("confrontBreaksSkipped", JSON.stringify(nudgeTracker));
-      numBreaksSkipped = localStorage.getItem("numConfrontBreaksSkipped");
-      numBreaksSkipped++;
-      localStorage.setItem("numConfrontBreaksSkipped", numBreaksSkipped);
-      break;
-    case "facilitate":
-      nudgeTracker = JSON.parse(localStorage.getItem("facilitateBreaksSkipped"));
-      timeElapsed = curDate - Date.parse(localStorage.getItem("timeElapsedStart"));
-      timeElapsed = Math.round(timeElapsed / 1000);
-      insert = ["Timestamp: " + curDate.toString(), "FacilitateNudge", "focusTime: " + localStorage.getItem("focusTime"), "shortBreak: " + localStorage.getItem("shortBreak"), "longBreak: " + localStorage.getItem("longBreak"), "Break Skipped: " + localStorage.getItem("typeOfBreak"), "Time Elapsed Since Focus: " + timeElapsed];
-      nudgeTracker.push(insert);
-      localStorage.setItem("facilitateBreaksSkipped", JSON.stringify(nudgeTracker));
-      numBreaksSkipped = localStorage.getItem("numFacilitateBreaksSkipped");
-      numBreaksSkipped++;
-      localStorage.setItem("numFacilitateBreaksSkipped", numBreaksSkipped);
-      break;
-    default:
-      console.log("Error");
-      break;
-  }
+  nudgeLog("Skipped");
   currentPart = localStorage.getItem("currentPart");
   sectionsOfCycleCompleted = localStorage.getItem("sectionsOfCycleCompleted");
   if (currentPart == SHORT) {
@@ -354,6 +303,51 @@ function skipBreak() {
   localStorage.setItem("sectionsOfCycleCompleted", sectionsOfCycleCompleted);
   localStorage.setItem("currentPart", FOCUS);
   pausePlayTimer();
+}
+
+function nudgeLog(location) {
+  var curDate = new Date();
+  var numBreaksSkipped;
+  var timeElapsed;
+  timeElapsed = curDate - Date.parse(localStorage.getItem("timeElapsedStart"));
+  timeElapsed = Math.round(timeElapsed / 1000);
+  switch (localStorage.getItem("nudgeState")) {
+    case "reinforce":
+      var logObject = createTimeLog("reinforce", curDate.toString(), localStorage.getItem("focusTime"), localStorage.getItem("shortBreak"), localStorage.getItem("longBreak"), localStorage.getItem("typeOfBreak"), timeElapsed, localStorage.getItem("reinforceLevel"));
+      appendLog(logObject, "reinforceBreaks" + location);
+
+      numBreaksSkipped = localStorage.getItem("numReinforceBreaks" + location);
+      numBreaksSkipped++;
+      localStorage.setItem("numReinforceBreaks" + location, numBreaksSkipped);
+      break;
+    case "leveraging":
+      logObject = createTimeLog("leveraging", curDate.toString(), localStorage.getItem("focusTime"), localStorage.getItem("shortBreak"), localStorage.getItem("longBreak"), localStorage.getItem("typeOfBreak"), timeElapsed, localStorage.getItem("goalPomodoros"));
+      appendLog(logObject, "leveragingBreaks" + location);
+
+      numBreaksSkipped = localStorage.getItem("numLeveragingBreaks" + location);
+      numBreaksSkipped++;
+      localStorage.setItem("numLeveragingBreaks" + location, numBreaksSkipped);
+      break;
+    case "confront":
+      logObject = createTimeLog("confront", curDate.toString(), localStorage.getItem("focusTime"), localStorage.getItem("shortBreak"), localStorage.getItem("longBreak"), localStorage.getItem("typeOfBreak"), timeElapsed, localStorage.getItem("confrontQuote"));
+      appendLog(logObject, "leveragingBreaks" + location);
+
+      numBreaksSkipped = localStorage.getItem("numConfrontBreaks" + location);
+      numBreaksSkipped++;
+      localStorage.setItem("numConfrontBreaks" + location, numBreaksSkipped);
+      break;
+    case "facilitate":
+      logObject = createTimeLog("facilitate", curDate.toString(), localStorage.getItem("focusTime"), localStorage.getItem("shortBreak"), localStorage.getItem("longBreak"), localStorage.getItem("typeOfBreak"), timeElapsed, "N/A");
+      appendLog(logObject, "leveragingBreaks" + location);
+
+      numBreaksSkipped = localStorage.getItem("numFacilitateBreaks" + location);
+      numBreaksSkipped++;
+      localStorage.setItem("numFacilitateBreaks" + location, numBreaksSkipped);
+      break;
+    default:
+      console.log("default skipped");
+      break;
+  }
 }
 
 // decide whether to call the pause or play functino
@@ -552,61 +546,8 @@ function startTime() {
   else {
     console.log("error no match");
   }
-
-  var nudgeTracker;
-  var numBreaksTaken;
-  var insert;
-  var timeElapsed;
   if (currentPart != FOCUS) {
-    switch (localStorage.getItem("nudgeState")) {
-      case "reinforce":
-        nudgeTracker = JSON.parse(localStorage.getItem("reinforceBreaksTaken"));
-        timeElapsed = endTime - Date.parse(localStorage.getItem("timeElapsedStart"));
-        timeElapsed = Math.round(timeElapsed / 1000);
-        insert = ["Timestamp: " + endTime.toString(), "Reinforce Level When Taking Break: " + localStorage.getItem("reinforceLevel"), "focusTime: " + localStorage.getItem("focusTime"), "shortBreak: " + localStorage.getItem("shortBreak"), "longBreak: " + localStorage.getItem("longBreak"), "Break Taken: " + localStorage.getItem("typeOfBreak"), "Time Elapsed Since Focus: " + timeElapsed];
-        nudgeTracker.push(insert);
-        localStorage.setItem("reinforceBreaksTaken", JSON.stringify(nudgeTracker));
-        numBreaksTaken = localStorage.getItem("numReinforceBreaksTaken");
-        numBreaksTaken++;
-        localStorage.setItem("numReinforceBreaksTaken", numBreaksTaken);
-        break;
-      case "leveraging":
-        nudgeTracker = JSON.parse(localStorage.getItem("leveragingBreaksTaken"));
-        timeElapsed = endTime - Date.parse(localStorage.getItem("timeElapsedStart"));
-        timeElapsed = Math.round(timeElapsed / 1000);
-        insert = ["Timestamp: " + endTime.toString(), "Break Goal When Break Taken: " + localStorage.getItem("goalPomodoros"), "focusTime: " + localStorage.getItem("focusTime"), "shortBreak: " + localStorage.getItem("shortBreak"), "longBreak: " + localStorage.getItem("longBreak"), "Break Taken: " + localStorage.getItem("typeOfBreak"), "Time Elapsed Since Focus: " + timeElapsed];
-        nudgeTracker.push(insert);
-        localStorage.setItem("leveragingBreaksTaken", JSON.stringify(nudgeTracker));
-        numBreaksTaken = localStorage.getItem("numLeveragingBreaksTaken");
-        numBreaksTaken++;
-        localStorage.setItem("numLeveragingBreaksTaken", numBreaksTaken);
-        break;
-      case "confront":
-        nudgeTracker = JSON.parse(localStorage.getItem("confrontBreaksTaken"));
-        timeElapsed = endTime - Date.parse(localStorage.getItem("timeElapsedStart"));
-        timeElapsed = Math.round(timeElapsed / 1000);
-        insert = ["Timestamp: " + endTime.toString(), "Confront Quote: " + localStorage.getItem("confrontQuote"), "focusTime: " + localStorage.getItem("focusTime"), "shortBreak: " + localStorage.getItem("shortBreak"), "longBreak: " + localStorage.getItem("longBreak"), "Break Taken: " + localStorage.getItem("typeOfBreak"), "Time Elapsed Since Focus: " + timeElapsed];
-        nudgeTracker.push(insert);
-        localStorage.setItem("confrontBreaksTaken", JSON.stringify(nudgeTracker));
-        numBreaksTaken = localStorage.getItem("numConfrontBreaksTaken");
-        numBreaksTaken++;
-        localStorage.setItem("numConfrontBreaksTaken", numBreaksTaken);
-        break;
-      case "facilitate":
-        nudgeTracker = JSON.parse(localStorage.getItem("facilitateBreaksTaken"));
-        timeElapsed = endTime - Date.parse(localStorage.getItem("timeElapsedStart"));
-        timeElapsed = Math.round(timeElapsed / 1000);
-        insert = ["Timestamp: " + endTime.toString(), "FacilitateNudge", "focusTime: " + localStorage.getItem("focusTime"), "shortBreak: " + localStorage.getItem("shortBreak"), "longBreak: " + localStorage.getItem("longBreak"), "Break Taken: " + localStorage.getItem("typeOfBreak"), "Time Elapsed Since Focus: " + timeElapsed];
-        nudgeTracker.push(insert);
-        localStorage.setItem("facilitateBreaksTaken", JSON.stringify(nudgeTracker));
-        numBreaksTaken = localStorage.getItem("numFacilitateBreaksTaken");
-        numBreaksTaken++;
-        localStorage.setItem("numFacilitateBreaksTaken", numBreaksTaken);
-        break;
-      default:
-        console.log("Error");
-        break;
-    }
+    nudgeLog("Taken");
   }
   // un-pause the timer
   timerPaused = false;
@@ -692,7 +633,6 @@ function resetter() {
     localStorage.setItem("inProgress", false);
     localStorage.setItem("startTime", new Date());
     localStorage.setItem("endTime", new Date());
-    localStorage.setItem("breaksTaken", 0);
     localStorage.setItem("goalPomodoros", "0");
     localStorage.setItem("lastAction", "null");
     localStorage.setItem("lastLevel", "reinforce/gif/tomato-01.gif");
@@ -708,6 +648,11 @@ function resetter() {
     localStorage.setItem("distance", 0);
     localStorage.setItem("proceed", "false");
     localStorage.setItem("timerPaused", false);
+
+    localStorage.setItem("timeElapsedStart", "");
+    localStorage.setItem("timeElapsedEnd", "");
+    localStorage.setItem("typeOfBreak", "");
+
 
     var repeat = true;
     var nudgesCompleted = JSON.parse(localStorage.getItem("nudgesCompleted"));
@@ -771,4 +716,81 @@ function resetter() {
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
+}
+
+// Needs additional function "GoToQualtrics"
+// Inside that, call submit.
+function submit() {
+  // This function creates and downloads the logs as a json file
+  let filename = "sub-" + localStorage.getItem("userID") + ".json";
+  let contentType = "application/json;charset=utf-8;";
+  let objectData = getResults();
+  if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+    var blob = new Blob(
+      [decodeURIComponent(encodeURI(JSON.stringify(objectData)))],
+      { type: contentType }
+    );
+    navigator.msSaveOrOpenBlob(blob, filename);
+  } else {
+    var a = document.createElement("a");
+    a.download = filename;
+    a.href =
+      "data:" +
+      contentType +
+      "," +
+      encodeURIComponent(JSON.stringify(objectData));
+    a.target = "_blank";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+}
+
+function getResults() {
+  var results = {};
+  results.id = localStorage.getItem("userID");
+
+  results.rnfBrkSkip = JSON.parse(localStorage.getItem("reinforceBreaksSkipped"));
+  results.numRnfSkip = localStorage.getItem("numReinforceBreaksSkipped");
+
+  results.lvgBrkSkip = JSON.parse(localStorage.getItem("leveragingBreaksSkipped"));
+  results.numLvgSkip = localStorage.getItem("numLeveragingBreaksSkipped");
+
+  results.cnfBrkSkip = JSON.parse(localStorage.getItem("confrontBreaksSkipped"));
+  results.numCnfSkip = (localStorage.getItem("numConfrontBreaksSkipped"));
+
+  results.fclBrkSkip = JSON.parse(localStorage.getItem("facilitateBreaksSkipped"));
+  results.numFclSkip = (localStorage.getItem("numFacilitateBreaksSkipped"));
+
+
+  results.rnfBrkTkn = JSON.parse(localStorage.getItem("reinforceBreaksTaken"));
+  results.numRnfTkn = (localStorage.getItem("numReinforceBreaksTaken"));
+
+  results.lvgBrkTkn = JSON.parse(localStorage.getItem("leveragingBreaksTaken"));
+  results.numLvgTkn = (localStorage.getItem("numLeveragingBreaksTaken"));
+
+  results.cnfBrkTkn = JSON.parse(localStorage.getItem("confrontBreaksTaken"));
+  results.numCnfTkn = (localStorage.getItem("numConfrontBreaksTaken"));
+
+  results.FclBrkTkn = JSON.parse(localStorage.getItem("facilitateBreaksTaken"));
+  results.numFclTkn = (localStorage.getItem("numFacilitateBreaksTaken"));
+
+  results.ttlGoals = JSON.parse(localStorage.getItem("totalGoalPomodoros"));
+  results.rnfSeq = JSON.parse(localStorage.getItem("reinforceSequence"));
+  
+  results.ttlBrkSkip = localStorage.getItem("breaksSkipped");
+  results.ttlBrkTkn = localStorage.getItem("breaksTaken");
+
+  results.ndgCmp = localStorage.getItem("nudgesCompleted");
+  results.ndgSt = localStorage.getItem("nudgeState");
+  results.lstCnf = JSON.parse(localStorage.getItem("completeListOfConfrontsGiven"));
+
+  results.ttlCyc = localStorage.getItem("totalCycles");
+  results.tdyCyc = localStorage.getItem("todaysCycles");
+  results.sctCyc = localStorage.getItem("sectionsOfCycleCompleted");
+  results.fTime = localStorage.getItem("focusTime");
+  results.shBrkT = localStorage.getItem("shortBreak");
+  results.lngBrkT = localStorage.getItem("longBreak");
+
+  return results;
 }

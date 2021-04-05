@@ -20,6 +20,7 @@ var focusTime = document.getElementById("focusTime");
 var shortBreak = document.getElementById("shortBreak");
 var longBreak = document.getElementById("longBreak");
 var updateId = document.getElementById("update-settings");
+var qualtrics = document.getElementById("qualtrics-button");
 
 var todaysCycles = 0;
 var totalCycles = 0;
@@ -213,7 +214,7 @@ if (localStorage.getItem("timerPaused")=="false" && localStorage.getItem("inProg
   changeBackgroundColor("start-button", "#4CAF50");
 }
 
-  
+qualtrics.addEventListener('click', submit); 
 
 updateId.addEventListener('click', function () {
     focusTime = document.getElementById("focusTime");
@@ -278,8 +279,36 @@ document.getElementById("snooze-button").addEventListener("click", function() {
 function startTimer() {
   startTime();
 }
+function nudgeLog(location) {
+  var curDate = new Date();
+  var numBreaksSkipped;
+  var timeElapsed;
+
+  timeElapsed = curDate - Date.parse(localStorage.getItem("timeElapsedStart"));
+  timeElapsed = Math.round(timeElapsed / 1000);
+
+  var logObject = createTimeLog("default", curDate.toString(), localStorage.getItem("focusTime"), localStorage.getItem("shortBreak"), localStorage.getItem("longBreak"), localStorage.getItem("typeOfBreak"), timeElapsed, "N/A");
+  appendLog(logObject, "defaultBreaks" + location);
+
+  numBreaksSkipped = localStorage.getItem("numDefaultBreaks" + location);
+  numBreaksSkipped++;
+  localStorage.setItem("numDefaultBreaks" + location, numBreaksSkipped);
+
+  var dailyBrkSkip = JSON.parse(localStorage.getItem("dailyDefaultBreaks" + location));
+  if (location == "Skipped") {
+    dailyBrkSkip[dailyBrkSkip.length - 1].brkSkip = numBreaksSkipped;
+  }
+  else if (location == "Taken") {
+    dailyBrkSkip[dailyBrkSkip.length - 1].brkTkn = numBreaksSkipped;
+  }
+  else {
+    console.log("ERROR!!!!!");
+  }
+  localStorage.setItem("dailyDefaultBreaks" + location, JSON.stringify(dailyBrkSkip));
+}
 
 function skipBreak() {
+  nudgeLog("Skipped");
   currentPart = localStorage.getItem("currentPart");
   sectionsOfCycleCompleted = localStorage.getItem("sectionsOfCycleCompleted");
   if (currentPart == SHORT) {
@@ -472,6 +501,7 @@ function startTime() {
   }
   else if(currentPart == SHORT)
   {
+    localStorage.setItem("typeOfBreak", "shortBreak");
     shortTime = localStorage.getItem("shortBreak");
     endTime.setTime(endTime.getTime() + shortTime * 60000);
     localStorage.setItem("endTime", endTime);
@@ -484,6 +514,7 @@ function startTime() {
   }
   else if (currentPart == LONG)
   {
+    localStorage.setItem("typeOfBreak", "longBreak");
     longTime = localStorage.getItem("longBreak");
     endTime.setTime(endTime.getTime() + longTime * 60000);
     localStorage.setItem("endTime", endTime);
@@ -497,6 +528,9 @@ function startTime() {
     console.log("error no match");
   }
 
+  if (currentPart != FOCUS) {
+    nudgeLog("Taken");
+  }
   // un-pause the timer
   timerPaused = false;
   localStorage.setItem("timerPaused", false);
@@ -581,7 +615,6 @@ function resetter() {
     localStorage.setItem("inProgress", false);
     localStorage.setItem("startTime", new Date());
     localStorage.setItem("endTime", new Date());
-    localStorage.setItem("breaksTaken", 0);
     localStorage.setItem("goalPomodoros", "0");
     localStorage.setItem("lastAction", "null");
     localStorage.setItem("lastLevel", "reinforce/gif/tomato-01.gif");
@@ -597,9 +630,27 @@ function resetter() {
     localStorage.setItem("distance", 0);
     localStorage.setItem("proceed", "false");
     localStorage.setItem("timerPaused", false);
+    
+    localStorage.setItem("timeElapsedStart", "");
+    localStorage.setItem("timeElapsedEnd", "");
+    localStorage.setItem("typeOfBreak", "");
 
+    localStorage.setItem("nudgeState", "default");
+
+    localStorage.setItem("numDefaultBreaksTaken", 0);
+
+    localStorage.setItem("numDefaultBreaksSkipped", 0);
+
+    var item = JSON.parse(localStorage.getItem("dailyDefaultBreaksSkipped"));
+    item.append({brkSkip: 0});
+    localStorage.setItem("dailyDefaultBreaksSkipped", JSON.stringify(item));
+
+    var item2 = JSON.parse(localStorage.getItem("dailyDefaultBreaksTaken"));
+    item2.append({brkTkn: 0});
+    localStorage.setItem("dailyDefaultBreaksTkn", JSON.stringify(item2));
     var repeat = true;
     var nudgesCompleted = JSON.parse(localStorage.getItem("nudgesCompleted"));
+
     if (nudgesCompleted.length == 4) {
       localStorage.setItem("nudgeState", "default");
       repeat = false;
@@ -658,6 +709,61 @@ function resetter() {
   }
 }
 
+function submit() {
+  // This function creates and downloads the logs as a json file
+  let filename = "sub-" + localStorage.getItem("userID") + ".json";
+  let contentType = "application/json;charset=utf-8;";
+  let objectData = getResults();
+  if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+    var blob = new Blob(
+      [decodeURIComponent(encodeURI(JSON.stringify(objectData)))],
+      { type: contentType }
+    );
+    navigator.msSaveOrOpenBlob(blob, filename);
+  } else {
+    var a = document.createElement("a");
+    a.download = filename;
+    a.href =
+      "data:" +
+      contentType +
+      "," +
+      encodeURIComponent(JSON.stringify(objectData));
+    a.target = "_blank";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+}
+
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
+}
+
+
+function getResults() {
+  var results = {};
+  results.id = localStorage.getItem("userID");
+
+  results.dftBrkSkip = JSON.parse(localStorage.getItem("defaultBreaksSkipped"));
+  results.numDftSkip = localStorage.getItem("numDefaultBreaksSkipped");
+
+  results.dftBrkTkn = JSON.parse(localStorage.getItem("defaultBreaksTaken"));
+  results.numDftTkn = (localStorage.getItem("numDefaultBreaksTaken"));
+
+  results.ttlBrkSkip = localStorage.getItem("breaksSkipped");
+  results.ttlBrkTkn = localStorage.getItem("breaksTaken");
+
+  results.qmlBrkSkip= JSON.parse(localStorage.getItem("dailyDefaultBreaksSkipped"));
+  results.qmlBrkTkn = JSON.parse(localStorage.getItem("dailyDefaultBreaksTaken"));
+
+  results.ndgSt = localStorage.getItem("nudgeState");
+
+  results.ttlCyc = localStorage.getItem("totalCycles");
+  results.tdyCyc = localStorage.getItem("todaysCycles");
+  results.sctCyc = localStorage.getItem("sectionsOfCycleCompleted");
+  results.fTime = localStorage.getItem("focusTime");
+  results.shBrkT = localStorage.getItem("shortBreak");
+  results.lngBrkT = localStorage.getItem("longBreak");
+
+  return results;
 }

@@ -112,6 +112,9 @@ chrome.runtime.onInstalled.addListener(function () {
   if (localStorage.getItem("breaksSkipped") == null){
     localStorage.setItem("breaksSkipped", 0);
   }
+
+  localStorage.setItem("userID", generateID());
+
   localStorage.setItem("confrontQuote", "");
   localStorage.setItem("typeOfBreak", "");
   localStorage.setItem("reinforceLevel", "");
@@ -210,7 +213,6 @@ var dateLoop = setInterval(function () {
     localStorage.setItem("inProgress", false);
     localStorage.setItem("startTime", new Date());
     localStorage.setItem("endTime", new Date());
-    localStorage.setItem("breaksTaken", 0);
     localStorage.setItem("goalPomodoros", "0");
     localStorage.setItem("lastAction", "null");
     localStorage.setItem("lastLevel", "reinforce/gif/tomato-01.gif");
@@ -549,6 +551,17 @@ function createNotification() {
     //include this line if you want to clear the notification after 5 seconds
     // setTimeout(function(){chrome.notifications.clear("BreakTimeNotification",function(){});},5000);
 }
+
+function generateID() {
+  var text = "";
+  //"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+  var possible = "abcdefghijklmnopqrstuvwxyz";
+  var number = Math.floor(Math.random() * 10000);
+  for (var i = 0; i < 5; i++)
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+  return text+number;
+}
+
 
 chrome.notifications.onClicked.addListener(function() {
   parent.focus();
