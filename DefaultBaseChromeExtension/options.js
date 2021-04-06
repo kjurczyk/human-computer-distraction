@@ -608,6 +608,7 @@ function resetter() {
     console.log("RESETTING VIA OPTIONS: ");
     console.log("pdate : " + localStorage.getItem("pomodoroDate"));
     console.log("date from var : " + d.getDate());
+
     localStorage.setItem("pomodoroDate", d.getDate());
     localStorage.setItem("todaysCycles", 0);
     localStorage.setItem("currentPart", FOCUS);
@@ -642,76 +643,18 @@ function resetter() {
     localStorage.setItem("numDefaultBreaksSkipped", 0);
 
     var item = JSON.parse(localStorage.getItem("dailyDefaultBreaksSkipped"));
-    item.append({brkSkip: 0});
+    item.push({"brkSkip": 0});
     localStorage.setItem("dailyDefaultBreaksSkipped", JSON.stringify(item));
-
+    
     var item2 = JSON.parse(localStorage.getItem("dailyDefaultBreaksTaken"));
-    item2.append({brkTkn: 0});
-    localStorage.setItem("dailyDefaultBreaksTkn", JSON.stringify(item2));
-    var repeat = true;
-    var nudgesCompleted = JSON.parse(localStorage.getItem("nudgesCompleted"));
-
-    if (nudgesCompleted.length == 4) {
-      localStorage.setItem("nudgeState", "default");
-      repeat = false;
-    }
-    while (repeat) {
-      switch (getRandomInt(4)) {
-        /*
-        case 0:
-          // default
-          if (!nudgesCompleted.includes('default')) {
-            repeat = false;
-            nudgesCompleted.push('default');
-            localStorage.setItem("nudgesCompleted", JSON.stringify(nudgesCompleted));
-            localStorage.setItem("nudgeState", "default");
-          }
-          break;
-          */
-        case 0:
-          // confront
-          if (!nudgesCompleted.includes('confront')) {
-            repeat = false;
-            nudgesCompleted.push('confront');
-            localStorage.setItem("nudgesCompleted", JSON.stringify(nudgesCompleted));
-            localStorage.setItem("nudgeState", "confront");
-          }
-          break;
-        case 1:
-          // facilitate
-          if (!nudgesCompleted.includes('facilitate')) {
-            repeat = false;
-            nudgesCompleted.push('facilitate');
-            localStorage.setItem("nudgesCompleted", JSON.stringify(nudgesCompleted));
-            localStorage.setItem("nudgeState", "facilitate");
-          }
-          break;
-        case 2:
-          // leveraging
-          if (!nudgesCompleted.includes('leveraging')) {
-            repeat = false;
-            nudgesCompleted.push('leveraging');
-            localStorage.setItem("nudgesCompleted", JSON.stringify(nudgesCompleted));
-            localStorage.setItem("nudgeState", "leveraging");
-          }
-          break;
-        case 3:
-          // reinforce
-          if (!nudgesCompleted.includes('reinforce')) {
-            repeat = false;
-            nudgesCompleted.push('reinforce');
-            localStorage.setItem("nudgesCompleted", JSON.stringify(nudgesCompleted));
-            localStorage.setItem("nudgeState", "reinforce");
-          }
-          break;
-      }
-    }
+    item2.push({"brkTkn": 0});
+    localStorage.setItem("dailyDefaultBreaksTaken", JSON.stringify(item2));
   }
 }
 
 function submit() {
   // This function creates and downloads the logs as a json file
-  let filename = "sub-" + localStorage.getItem("userID") + ".json";
+  let filename = "sub-" + localStorage.getItem("userID") + "-" + localStorage.getItem("pomodoroDate") + ".json";
   let contentType = "application/json;charset=utf-8;";
   let objectData = getResults();
   if (window.navigator && window.navigator.msSaveOrOpenBlob) {

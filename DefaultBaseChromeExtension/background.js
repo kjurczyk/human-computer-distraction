@@ -119,7 +119,7 @@ chrome.runtime.onInstalled.addListener(function () {
   localStorage.setItem("timeElapsedEnd", "");
 
   localStorage.setItem("numDefaultBreaksSkipped", 0);
-  localStorage.setItem("dailyDefaultBreaksSkipped", JSON.stringify([{brkSkip: 0}]));
+  localStorage.setItem("dailyDefaultBreaksSkipped", JSON.stringify([{"brkSkip": 0}]));
 
   // List nudge tactic (i.e., which stage)
   // List time stamp
@@ -131,7 +131,7 @@ chrome.runtime.onInstalled.addListener(function () {
   // List time stamp
   // List focus time, short break time, and long break time
   // specificy if long break or short break
-  localStorage.setItem("dailyDefaultBreaksTaken", JSON.stringify([{brkTkn: 0}]));
+  localStorage.setItem("dailyDefaultBreaksTaken", JSON.stringify([{"brkTkn": 0}]));
   localStorage.setItem("defaultBreaksTaken", JSON.stringify([]));
 });
 
@@ -218,12 +218,12 @@ var dateLoop = setInterval(function () {
     localStorage.setItem("numDefaultBreaksSkipped", 0);
 
     var item = JSON.parse(localStorage.getItem("dailyDefaultBreaksSkipped"));
-    item.append({brkSkip: 0});
+    item.push({"brkSkip": 0});
     localStorage.setItem("dailyDefaultBreaksSkipped", JSON.stringify(item));
-
+    
     var item2 = JSON.parse(localStorage.getItem("dailyDefaultBreaksTaken"));
-    item2.append({brkTkn: 0});
-    localStorage.setItem("dailyDefaultBreaksTkn", JSON.stringify(item2));
+    item2.push({"brkTkn": 0});
+    localStorage.setItem("dailyDefaultBreaksTaken", JSON.stringify(item2));
   }
 }, 300000);
 
