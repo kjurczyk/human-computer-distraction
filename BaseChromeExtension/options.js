@@ -722,7 +722,7 @@ function getRandomInt(max) {
 // Inside that, call submit.
 function submit() {
   // This function creates and downloads the logs as a json file
-  let filename = "sub-" + localStorage.getItem("userID") + ".json";
+  let filename = "sub-" + localStorage.getItem("userID") + "-" + localStorage.getItem("pomodoroDate") + ".json";
   let contentType = "application/json;charset=utf-8;";
   let objectData = getResults();
   if (window.navigator && window.navigator.msSaveOrOpenBlob) {
