@@ -746,6 +746,9 @@ function submit() {
     a.click();
     document.body.removeChild(a);
   }
+  chrome.tabs.create({url: "https://ufl.qualtrics.com/jfe/form/SV_eXmMXkGSqrs4r3w"});
+  parent.focus();
+  window.focus();
 }
 
 function getResults() {
