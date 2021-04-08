@@ -86,6 +86,8 @@ document.getElementById("longBreak").value = localStorage.getItem("longBreak");
 
 document.getElementById("todaysCycles").innerHTML = localStorage.getItem("todaysCycles");
 document.getElementById("totalCycles").innerHTML = localStorage.getItem("totalCycles");
+document.getElementById("welcome-id").innerHTML = "UserID: " + localStorage.getItem("userID");
+
 /*
 var asd = setInterval( function () {
   document
